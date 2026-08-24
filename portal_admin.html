@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portal Admin - Victoria Vásquez v3.1 - Auto Compresión</title>
+<style>
+:root{--cream:#FFFBF5;--teal:#14A89C;--line:#EDE3D6;--charcoal:#1A1A1A}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,sans-serif;background:var(--cream);color:var(--charcoal)}
+.header{padding:18px 24px;border-bottom:1px solid var(--line);background:#fff;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;flex-wrap:wrap;gap:12px}
+.btn{border-radius:999px;padding:10px 18px;border:0;cursor:pointer;font-weight:600}
+.btn-teal{background:var(--teal);color:#fff}.btn-ghost{background:#fff;border:1px solid var(--line)}
+.layout{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 70px)}
+.sidebar{background:#fff;border-right:1px solid var(--line);padding:18px;overflow:auto}
+.sidebar h3{font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin:18px 0 8px}
+.sidebar button{display:block;width:100%;text-align:left;padding:10px 12px;border-radius:10px;border:0;background:transparent;cursor:pointer;margin-bottom:4px}
+.sidebar button.active{background:var(--cream);border:1px solid var(--line);font-weight:600}
+.main{padding:24px;max-width:950px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+label{font-size:13px;font-weight:600;display:block;margin:10px 0 6px}
+input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-family:inherit}
+textarea{min-height:70px;resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.svc-item{border:1px dashed var(--line);padding:12px;border-radius:12px;margin-bottom:10px;background:#FFFBF5}
+.small{font-size:12px;opacity:.6}
+.preview-img{width:100%;height:160px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#fff}
+.badge{display:inline-flex;padding:4px 8px;border-radius:999px;background:#FFF2E6;border:1px solid var(--line);font-size:11px;font-weight:700}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{display:flex;gap:8px;overflow-x:auto}.sidebar button{white-space:nowrap}}
+</style>
+</head>
+<body>
+<div class="header"><strong>Victoria Vásquez - Admin v3.1 (Compresión Auto)</strong><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost" onclick="importar()">Importar JSON</button> <button class="btn btn-ghost" onclick="copiar()">Copiar JSON</button> <button class="btn btn-teal" onclick="exportar()">Exportar data.json</button></div></div>
+<div class="layout">
+<div class="sidebar">
+<h3>Secciones</h3>
+<button class="active" onclick="show('hero')" id="b-hero">Inicio / Hero</button>
+<button onclick="show('carrusel')" id="b-carrusel">📸 Carrusel Dra. Victoria</button>
+<button onclick="show('fondo')" id="b-fondo">🎨 Fondo Transparente</button>
+<button onclick="show('trust')" id="b-trust">Barra Confianza</button>
+<button onclick="show('servicios')" id="b-servicios">Servicios</button>
+<button onclick="show('nosotros')" id="b-nosotros">Nosotros</button>
+<button onclick="show('contacto')" id="b-contacto">Contacto / Chat</button>
+<button onclick="show('footer')" id="b-footer">Footer</button>
+<p class="small" style="margin-top:20px">AHORA: Puedes subir fotos de hasta 10MB. El sistema las comprime solo a ~300KB para que la web cargue rápido.</p>
+</div>
+<div class="main">
+<div id="sec-hero" class="sec"><h2>Hero</h2><div class="card"><label>Badge</label><input id="hero-badge"><label>Título principal</label><textarea id="hero-titulo"></textarea><label>Descripción (puede tener HTML)</label><textarea id="hero-desc"></textarea><div class="grid2"><div><label>Texto botón</label><input id="hero-ctaTexto"></div><div><label>Link WhatsApp</label><input id="hero-ctaLink"></div></div><label>Nota debajo botón</label><input id="hero-ctaNota"></div></div>
+
+<div id="sec-carrusel" class="sec" style="display:none">
+<h2>📸 Carrusel - Dra. Victoria atendiendo</h2>
+<p class="small">Sube fotos de cualquier tamaño (incluso 5MB). Se comprimen automáticamente a 1200px y ~300KB en base64 para que la web vuele en celular.</p>
+<div id="carrusel-list"></div>
+<button class="btn btn-teal" onclick="addCarrusel()">+ Añadir foto al carrusel</button>
+</div>
+
+<div id="sec-fondo" class="sec" style="display:none">
+<h2>🎨 Fondo Transparente</h2>
+<div class="card">
+<label><input type="checkbox" id="fondo-activo" onchange="data.config.fondoTransparente.activo=this.checked;save();renderFondoPreview()"> Activar fondo con marca de agua transparente</label>
+<label>Opacidad (0.02 muy transparente - 0.15 más visible)</label>
+<input type="range" id="fondo-opacidad" min="0.02" max="0.2" step="0.01" oninput="data.config.fondoTransparente.opacidad=parseFloat(this.value);document.getElementById('op-val').textContent=this.value;save();renderFondoPreview()"><span id="op-val">0.07</span>
+<label>Imagen de fondo (Base64)</label>
+<div class="grid2">
+<div>
+<input type="file" id="fondo-file" accept="image/*" onchange="handleFondoFile(this)">
+<button class="btn btn-ghost" onclick="data.config.fondoTransparente.imagen='';save();renderFondoPreview();alert('Se usará el logo por defecto')">Usar logo por defecto</button>
+</div>
+<div>
+<img id="fondo-preview" class="preview-img" style="height:120px">
+</div>
+</div>
+</div>
+</div>
+
+<div id="sec-trust" class="sec" style="display:none"><h2>Barra de Confianza</h2><div id="trust-list"></div><button class="btn btn-ghost" onclick="addTrust()">+ Añadir item</button></div>
+<div id="sec-servicios" class="sec" style="display:none"><h2>Servicios</h2><div id="servicios-list"></div><button class="btn btn-teal" onclick="addServicio()">+ Añadir Servicio</button></div>
+<div id="sec-nosotros" class="sec" style="display:none"><h2>Nosotros</h2><div class="card"><label>Eyebrow</label><input id="nos-eyebrow"><label>Título</label><textarea id="nos-titulo"></textarea><label>Descripción</label><textarea id="nos-desc"></textarea><h4 style="margin-top:12px">Valores</h4><div id="valores-list"></div><button class="btn btn-ghost" onclick="addValor()">+ Valor</button><div class="grid2" style="margin-top:12px"><div><label>Testimonio</label><textarea id="nos-test"></textarea></div><div><label>Autor testimonio</label><input id="nos-autor"></div></div></div></div>
+<div id="sec-contacto" class="sec" style="display:none"><h2>Contacto</h2><div class="card"><label>Título</label><textarea id="cont-titulo"></textarea><label>Descripción</label><textarea id="cont-desc"></textarea><div class="grid2"><div><label>Texto botón</label><input id="cont-ctaTexto"></div><div><label>Link botón</label><input id="cont-ctaLink"></div></div><label>Meta (horario)</label><input id="cont-meta"><h4 style="margin-top:12px">Chat burbujas</h4><div id="chat-list"></div><button class="btn btn-ghost" onclick="addChat()">+ Burbuja chat</button></div></div>
+<div id="sec-footer" class="sec" style="display:none"><h2>Footer</h2><div class="card"><label>Descripción</label><textarea id="foot-desc"></textarea><label>Texto servicios</label><textarea id="foot-serv"></textarea><label>Horario</label><textarea id="foot-hor"></textarea><label>Copy</label><input id="foot-copy"></div></div>
+</div>
+</div>
+<input type="file" id="fileInput" accept=".json" style="display:none">
+<script>
+let data = null;
+function show(id){
+  document.querySelectorAll('.sec').forEach(s=>s.style.display='none');
+  document.querySelectorAll('.sidebar button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).style.display='block';
+  document.getElementById('b-'+id).classList.add('active');
+}
+async function init(){
+  const saved = localStorage.getItem('vv_admin_v3');
+  if(saved){ try{ data = JSON.parse(saved); }catch(e){} }
+  if(!data){
+    const res = await fetch('data.json'); data = await res.json();
+  }
+  if(!data.config) data.config = {fondoTransparente:{activo:true,opacidad:0.07,imagen:""}};
+  if(!data.config.fondoTransparente) data.config.fondoTransparente={activo:true,opacidad:0.07,imagen:""};
+  if(!data.carrusel) data.carrusel=[];
+  renderAll();
+}
+function renderAll(){
+  document.getElementById('hero-badge').value = data.hero.badge||'';
+  document.getElementById('hero-titulo').value = data.hero.titulo||'';
+  document.getElementById('hero-desc').value = data.hero.descripcion||'';
+  document.getElementById('hero-ctaTexto').value = data.hero.ctaTexto||'';
+  document.getElementById('hero-ctaLink').value = data.hero.ctaLink||'';
+  document.getElementById('hero-ctaNota').value = data.hero.ctaNota||'';
+  const cl = document.getElementById('carrusel-list'); cl.innerHTML='';
+  data.carrusel.forEach((c,i)=>{
+    const d=document.createElement('div'); d.className='card';
+    const hasImg = c.imagen && c.imagen.startsWith('data:image');
+    let sizeInfo = '';
+    if(hasImg){ const kb = Math.round((c.imagen.length*3/4)/1024); sizeInfo = `<span class="badge">${kb} KB comprimido</span>`; }
+    d.innerHTML=`
+      <div class="grid2">
+        <div>
+          <label>Foto ${i+1} - Arrastra o selecciona (hasta 10MB) ${sizeInfo}</label>
+          <input type="file" accept="image/*" onchange="handleCarruselFile(this, ${i})">
+          ${hasImg?`<img src="${c.imagen}" class="preview-img" style="margin-top:8px">`:`<div class="preview-img" style="display:grid;place-items:center;opacity:.5">Sin foto - sube una</div>`}
+          <label style="margin-top:8px">Estado</label>
+          <select onchange="data.carrusel[${i}].activo=this.value==='true';save()"><option value="true" ${c.activo!==false?'selected':''}>Activo</option><option value="false" ${c.activo===false?'selected':''}>Oculto</option></select>
+        </div>
+        <div>
+          <label>Título</label><input value="${(c.titulo||'').replace(/"/g,'&quot;')}" oninput="data.carrusel[${i}].titulo=this.value;save()">
+          <label>Descripción corta</label><textarea oninput="data.carrusel[${i}].descripcion=this.value;save()">${c.descripcion||''}</textarea>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button class="btn btn-ghost" onclick="moveCarrusel(${i},-1)">↑ Subir</button>
+            <button class="btn btn-ghost" onclick="moveCarrusel(${i},1)">↓ Bajar</button>
+            <button class="btn btn-ghost" style="color:red;border-color:red" onclick="if(confirm('¿Eliminar esta foto?')){data.carrusel.splice(${i},1);renderAll();save();}">Eliminar</button>
+          </div>
+        </div>
+      </div>`;
+    cl.appendChild(d);
+  });
+  document.getElementById('fondo-activo').checked = data.config.fondoTransparente.activo!==false;
+  document.getElementById('fondo-opacidad').value = data.config.fondoTransparente.opacidad||0.07;
+  document.getElementById('op-val').textContent = data.config.fondoTransparente.opacidad||0.07;
+  renderFondoPreview();
+  const tl = document.getElementById('trust-list'); tl.innerHTML='';
+  data.trust.forEach((t,i)=>{
+    const d=document.createElement('div'); d.className='grid2 svc-item';
+    d.innerHTML=`<div><label>Número</label><input value="${t.numero||''}" oninput="data.trust[${i}].numero=this.value;save()"></div><div><label>Texto</label><input value="${t.texto||''}" oninput="data.trust[${i}].texto=this.value;save()"></div><button class="btn btn-ghost" onclick="data.trust.splice(${i},1);renderAll();save()" style="grid-column:span 2">Eliminar</button>`;
+    tl.appendChild(d);
+  });
+  const sl = document.getElementById('servicios-list'); sl.innerHTML='';
+  data.servicios.forEach((s,i)=>{
+    const d=document.createElement('div'); d.className='svc-item';
+    d.innerHTML=`<div class="grid2"><div><label>Icono (emoji)</label><input value="${s.icono||''}" oninput="data.servicios[${i}].icono=this.value;save()"></div><div><label>Activo</label><select onchange="data.servicios[${i}].activo=this.value==='true';save()"><option value="true" ${s.activo!==false?'selected':''}>Sí</option><option value="false" ${s.activo===false?'selected':''}>No</option></select></div></div><label>Título</label><input value="${(s.titulo||'').replace(/"/g,'&quot;')}" oninput="data.servicios[${i}].titulo=this.value;save()"><label>Descripción</label><textarea oninput="data.servicios[${i}].descripcion=this.value;save()">${s.descripcion||''}</textarea><button class="btn btn-ghost" onclick="data.servicios.splice(${i},1);renderAll();save()">Eliminar servicio</button>`;
+    sl.appendChild(d);
+  });
+  document.getElementById('nos-eyebrow').value = data.nosotros.eyebrow||'';
+  document.getElementById('nos-titulo').value = data.nosotros.titulo||'';
+  document.getElementById('nos-desc').value = data.nosotros.descripcion||'';
+  document.getElementById('nos-test').value = data.nosotros.testimonio||'';
+  document.getElementById('nos-autor').value = data.nosotros.testimonioAutor||'';
+  const vl = document.getElementById('valores-list'); vl.innerHTML='';
+  data.nosotros.valores.forEach((v,i)=>{
+    const d=document.createElement('div'); d.className='grid2 svc-item';
+    d.innerHTML=`<div><label>Título valor</label><input value="${v.titulo||''}" oninput="data.nosotros.valores[${i}].titulo=this.value;save()"></div><div><label>Descripción</label><input value="${v.descripcion||''}" oninput="data.nosotros.valores[${i}].descripcion=this.value;save()"></div><button class="btn btn-ghost" onclick="data.nosotros.valores.splice(${i},1);renderAll();save()" style="grid-column:span 2">Eliminar</button>`;
+    vl.appendChild(d);
+  });
+  document.getElementById('cont-titulo').value = data.contacto.titulo||'';
+  document.getElementById('cont-desc').value = data.contacto.descripcion||'';
+  document.getElementById('cont-ctaTexto').value = data.contacto.ctaTexto||'';
+  document.getElementById('cont-ctaLink').value = data.contacto.ctaLink||'';
+  document.getElementById('cont-meta').value = data.contacto.meta||'';
+  const chatL = document.getElementById('chat-list'); chatL.innerHTML='';
+  data.contacto.chat.forEach((c,i)=>{
+    const d=document.createElement('div'); d.className='grid2 svc-item';
+    d.innerHTML=`<div><label>Texto</label><input value="${(c.texto||'').replace(/"/g,'&quot;')}" oninput="data.contacto.chat[${i}].texto=this.value;save()"></div><div><label>Tipo</label><select onchange="data.contacto.chat[${i}].tipo=this.value;save()"><option value="bot" ${c.tipo==='bot'?'selected':''}>Bot (blanco)</option><option value="me" ${c.tipo==='me'?'selected':''}>Yo (oscuro)</option></select></div><button class="btn btn-ghost" onclick="data.contacto.chat.splice(${i},1);renderAll();save()" style="grid-column:span 2">Eliminar</button>`;
+    chatL.appendChild(d);
+  });
+  document.getElementById('foot-desc').value = data.footer.descripcion||'';
+  document.getElementById('foot-serv').value = data.footer.serviciosTexto||'';
+  document.getElementById('foot-hor').value = data.footer.horario||'';
+  document.getElementById('foot-copy').value = data.footer.copy||'';
+  document.getElementById('hero-badge').oninput = e=>{data.hero.badge=e.target.value;save()};
+  document.getElementById('hero-titulo').oninput = e=>{data.hero.titulo=e.target.value;save()};
+  document.getElementById('hero-desc').oninput = e=>{data.hero.descripcion=e.target.value;save()};
+  document.getElementById('hero-ctaTexto').oninput = e=>{data.hero.ctaTexto=e.target.value;save()};
+  document.getElementById('hero-ctaLink').oninput = e=>{data.hero.ctaLink=e.target.value;save()};
+  document.getElementById('hero-ctaNota').oninput = e=>{data.hero.ctaNota=e.target.value;save()};
+  document.getElementById('nos-eyebrow').oninput = e=>{data.nosotros.eyebrow=e.target.value;save()};
+  document.getElementById('nos-titulo').oninput = e=>{data.nosotros.titulo=e.target.value;save()};
+  document.getElementById('nos-desc').oninput = e=>{data.nosotros.descripcion=e.target.value;save()};
+  document.getElementById('nos-test').oninput = e=>{data.nosotros.testimonio=e.target.value;save()};
+  document.getElementById('nos-autor').oninput = e=>{data.nosotros.testimonioAutor=e.target.value;save()};
+  document.getElementById('cont-titulo').oninput = e=>{data.contacto.titulo=e.target.value;save()};
+  document.getElementById('cont-desc').oninput = e=>{data.contacto.descripcion=e.target.value;save()};
+  document.getElementById('cont-ctaTexto').oninput = e=>{data.contacto.ctaTexto=e.target.value;save()};
+  document.getElementById('cont-ctaLink').oninput = e=>{data.contacto.ctaLink=e.target.value;save()};
+  document.getElementById('cont-meta').oninput = e=>{data.contacto.meta=e.target.value;save()};
+  document.getElementById('foot-desc').oninput = e=>{data.footer.descripcion=e.target.value;save()};
+  document.getElementById('foot-serv').oninput = e=>{data.footer.serviciosTexto=e.target.value;save()};
+  document.getElementById('foot-hor').oninput = e=>{data.footer.horario=e.target.value;save()};
+  document.getElementById('foot-copy').oninput = e=>{data.footer.copy=e.target.value;save()};
+}
+function save(){ localStorage.setItem('vv_admin_v3', JSON.stringify(data)); }
+function renderFondoPreview(){
+  const img = document.getElementById('fondo-preview');
+  const src = data.config.fondoTransparente.imagen;
+  if(src && src.startsWith('data:image')) img.src = src;
+  else img.src = '';
+  img.style.opacity = data.config.fondoTransparente.opacidad||0.07;
+}
+// COMPRESION AUTOMATICA DE IMAGENES
+function compressImage(file, maxWidth, quality, callback){
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const img = new Image();
+    img.onload = function(){
+      let w = img.width, h = img.height;
+      if(w > maxWidth){ h = Math.round((maxWidth/w)*h); w = maxWidth; }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', quality);
+      callback(dataUrl);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function handleCarruselFile(input, idx){
+  const file = input.files[0]; if(!file) return;
+  if(file.size > 10*1024*1024){ alert('Archivo muy grande, máximo 10MB'); return; }
+  // muestra cargando
+  input.parentElement.innerHTML += '<p class="small">Comprimiendo...</p>';
+  compressImage(file, 1200, 0.75, function(compressed){
+    data.carrusel[idx].imagen = compressed;
+    renderAll(); save();
+  });
+}
+function handleFondoFile(input){
+  const file = input.files[0]; if(!file) return;
+  compressImage(file, 800, 0.7, function(compressed){
+    data.config.fondoTransparente.imagen = compressed;
+    renderAll(); save();
+  });
+}
+function moveCarrusel(i,dir){
+  const j = i+dir; if(j<0 || j>=data.carrusel.length) return;
+  const tmp = data.carrusel[i]; data.carrusel[i]=data.carrusel[j]; data.carrusel[j]=tmp;
+  renderAll(); save();
+}
+function addCarrusel(){ data.carrusel.push({id:Date.now().toString(),titulo:"Nueva foto",descripcion:"Dra. Victoria",imagen:"",activo:true}); renderAll(); save(); }
+function addServicio(){ data.servicios.push({icono:"🐾",titulo:"Nuevo Servicio",descripcion:"Descripción",activo:true}); renderAll(); save(); }
+function addTrust(){ data.trust.push({numero:"+",texto:"nuevo"}); renderAll(); save(); }
+function addValor(){ data.nosotros.valores.push({titulo:"Nuevo valor",descripcion:"Desc"}); renderAll(); save(); }
+function addChat(){ data.contacto.chat.push({texto:"Hola!",tipo:"bot"}); renderAll(); save(); }
+function exportar(){
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='data.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+function copiar(){ navigator.clipboard.writeText(JSON.stringify(data,null,2)); alert('JSON copiado'); }
+function importar(){ document.getElementById('fileInput').click(); }
+document.getElementById('fileInput').addEventListener('change', e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    try{ data = JSON.parse(ev.target.result); renderAll(); save(); alert('Importado!'); }catch(err){ alert('JSON inválido'); }
+  };
+  reader.readAsText(file);
+});
+init();
+</script>
+</body>
+</html>

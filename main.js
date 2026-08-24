@@ -1,4 +1,5 @@
-// main.js?v=20260513 - Victoria Vasquez - IIFE, no modules
+
+// Victoria Vasquez v3 - Carrusel + Fondo transparente
 (function(){
   window.__BRAND__ = window.__BRAND__ || {};
   function safe(fn,name){ try{ fn(); }catch(e){ console.warn('[safe] '+name, e); } }
@@ -12,7 +13,7 @@
   }
   function initSplash(){
     var s=document.getElementById('splash'); if(!s) return;
-    setTimeout(function(){ s.classList.add('hide'); setTimeout(function(){ s.remove(); },600); },3800);
+    setTimeout(function(){ s.classList.add('hide'); setTimeout(function(){ s.remove(); },600); },2800);
   }
   function initTextSplit(){
     document.querySelectorAll('[data-split]').forEach(function(el){
@@ -69,29 +70,27 @@
   });
 })();
 
-
-// === NUEVO: Carga dinámica desde data.json para edición con portal admin ===
+// === CARRUSEL + FONDO TRANSPARENTE + DATA.JSON ===
 (function(){
+  let carouselIndex = 0;
+  let carouselTimer = null;
+  let slides = [];
+
   async function loadDataJson(){
     try{
       const res = await fetch('data.json?v=' + Date.now(), {cache: 'no-store'});
       if(!res.ok) throw new Error('data.json no encontrado');
       const data = await res.json();
-      console.log('[Victoria] data.json cargado', data);
+      console.log('[Victoria v3] data.json cargado', data);
       renderFromData(data);
+      initFondo(data);
+      initCarrusel(data);
     }catch(e){
-      console.warn('[Victoria] No se pudo cargar data.json, se usa contenido por defecto:', e);
-      // Si falla, intentamos renderizar al menos servicios por defecto desde el HTML viejo si existiera
-      // pero en esta versión los servicios se generan desde data.json, asi que mostramos mensaje
-      const grid = document.getElementById('services-grid');
-      if(grid && grid.children.length===0){
-        // Fallback: si no hay data.json, dejamos vacío y el usuario verá que necesita el archivo
-      }
+      console.warn('[Victoria] No se pudo cargar data.json:', e);
     }
   }
 
   function renderFromData(data){
-    // Hero
     if(data.hero){
       const b = document.getElementById('hero-badge');
       const t = document.getElementById('hero-titulo');
@@ -100,20 +99,16 @@
       const n = document.getElementById('hero-nota');
       const hw = document.getElementById('header-whatsapp');
       if(b && data.hero.badge) b.textContent = data.hero.badge;
-      if(t && data.hero.titulo){ t.textContent = data.hero.titulo; }
+      if(t && data.hero.titulo) t.textContent = data.hero.titulo;
       if(d && data.hero.descripcion) d.innerHTML = data.hero.descripcion;
       if(c){ if(data.hero.ctaTexto) c.textContent = data.hero.ctaTexto; if(data.hero.ctaLink) c.href = data.hero.ctaLink; }
       if(n && data.hero.ctaNota) n.textContent = data.hero.ctaNota;
       if(hw && data.hero.ctaLink) hw.href = data.hero.ctaLink;
     }
-    // Trust bar
     if(data.trust && Array.isArray(data.trust)){
       const tg = document.getElementById('trust-grid');
-      if(tg){
-        tg.innerHTML = data.trust.map(item => `<div><strong>${item.numero||''}</strong> ${item.texto||''}</div>`).join('');
-      }
+      if(tg){ tg.innerHTML = data.trust.map(item => `<div><strong>${item.numero||''}</strong> ${item.texto||''}</div>`).join(''); }
     }
-    // Servicios - IGUALITO al diseño original
     if(data.servicios){
       const grid = document.getElementById('services-grid');
       if(grid){
@@ -127,7 +122,6 @@
         });
       }
     }
-    // Nosotros
     if(data.nosotros){
       const eye = document.getElementById('nosotros-eyebrow');
       const tit = document.getElementById('nosotros-titulo');
@@ -141,10 +135,9 @@
       if(val && Array.isArray(data.nosotros.valores)){
         val.innerHTML = data.nosotros.valores.map(v=>`<li><strong>${v.titulo||''}:</strong> ${v.descripcion||''}</li>`).join('');
       }
-      if(test && data.nosotros.testimonio) test.childNodes[0].textContent = '"' + data.nosotros.testimonio + '"';
+      if(test && data.nosotros.testimonio) test.textContent = '"' + data.nosotros.testimonio + '"';
       if(aut && data.nosotros.testimonioAutor) aut.textContent = '— ' + data.nosotros.testimonioAutor;
     }
-    // Contacto
     if(data.contacto){
       const ct = document.getElementById('contacto-titulo');
       const cd = document.getElementById('contacto-desc');
@@ -162,7 +155,6 @@
         }).join('');
       }
     }
-    // Footer
     if(data.footer){
       const fd = document.getElementById('footer-desc');
       const fs = document.getElementById('footer-servicios');
@@ -175,7 +167,74 @@
     }
   }
 
-  document.addEventListener('DOMContentLoaded', function(){
-    loadDataJson();
-  });
+  function initFondo(data){
+    const bg = document.getElementById('bg-watermark');
+    if(!bg) return;
+    const cfg = data.config && data.config.fondoTransparente;
+    if(!cfg || cfg.activo===false){ bg.style.display='none'; return; }
+    const op = cfg.opacidad!=null ? cfg.opacidad : 0.07;
+    document.documentElement.style.setProperty('--bg-opacity', op);
+    let imgUrl = '';
+    if(cfg.imagen && cfg.imagen.startsWith('data:image')) imgUrl = cfg.imagen;
+    else imgUrl = 'assets/img/logo.png';
+    bg.style.backgroundImage = `url("${imgUrl}")`;
+    bg.style.display = 'block';
+  }
+
+  function initCarrusel(data){
+    const track = document.getElementById('carousel-track');
+    const dotsC = document.getElementById('carousel-dots');
+    const prev = document.getElementById('carousel-prev');
+    const next = document.getElementById('carousel-next');
+    if(!track) return;
+    const lista = (data.carrusel || []).filter(c=>c.activo!==false);
+    slides = lista.length ? lista : [{id:'ph', titulo:'Foto de la Dra. Victoria', descripcion:'Sube tus fotos desde el portal admin', imagen:'', activo:true}];
+    
+    track.innerHTML = slides.map(s=>{
+      const hasImg = s.imagen && s.imagen.startsWith('data:image');
+      if(hasImg){
+        return `<div class="carousel-slide"><img src="${s.imagen}" alt="${s.titulo||''}" loading="lazy"><div class="caption"><strong>${s.titulo||''}</strong><span>${s.descripcion||''}</span></div></div>`;
+      } else {
+        return `<div class="carousel-slide"><div class="placeholder"><img src="assets/img/logo.png" alt="Victoria"><div><strong>${s.titulo||'Agrega tu foto'}</strong><p style="font-size:13px;opacity:.6;margin-top:6px">${s.descripcion||'Desde el admin puedes subir fotos en base64'}</p></div></div></div>`;
+      }
+    }).join('');
+
+    if(dotsC){
+      dotsC.innerHTML = slides.map((_,i)=>`<button class="carousel-dot ${i===0?'active':''}" data-i="${i}" aria-label="Foto ${i+1}"></button>`).join('');
+      dotsC.querySelectorAll('.carousel-dot').forEach(dot=>{
+        dot.addEventListener('click', ()=>{ goTo(parseInt(dot.dataset.i)); resetTimer(); });
+      });
+    }
+
+    function goTo(i){
+      carouselIndex = (i + slides.length) % slides.length;
+      track.style.transform = `translateX(-${carouselIndex*100}%)`;
+      if(dotsC){
+        dotsC.querySelectorAll('.carousel-dot').forEach((d,idx)=> d.classList.toggle('active', idx===carouselIndex));
+      }
+    }
+    function nextSlide(){ goTo(carouselIndex+1); }
+    function prevSlide(){ goTo(carouselIndex-1); }
+    function resetTimer(){
+      if(carouselTimer) clearInterval(carouselTimer);
+      carouselTimer = setInterval(nextSlide, 5000);
+    }
+
+    if(prev) prev.onclick = ()=>{ prevSlide(); resetTimer(); };
+    if(next) next.onclick = ()=>{ nextSlide(); resetTimer(); };
+
+    // swipe mobile
+    let startX = 0;
+    track.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; }, {passive:true});
+    track.addEventListener('touchend', e=>{
+      const diff = e.changedTouches[0].clientX - startX;
+      if(Math.abs(diff)>50){ if(diff<0) nextSlide(); else prevSlide(); resetTimer(); }
+    });
+
+    goTo(0);
+    resetTimer();
+    window.__carouselGoTo = goTo;
+  }
+
+  document.addEventListener('DOMContentLoaded', loadDataJson);
 })();
