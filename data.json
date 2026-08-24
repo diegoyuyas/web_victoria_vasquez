@@ -1,0 +1,147 @@
+{
+  "hero": {
+    "badge": "Emergencias • Atención con amor",
+    "titulo": "Cuidado con amor para quienes te aman sin condiciones",
+    "descripcion": "En Victoria Vásquez atendemos a tu familia peluda como si fuera nuestra. Consultas, baños, cortes, vacunas y urgencias en Tumán-Chiclayo, con trato humano y profesional.",
+    "ctaTexto": "Escríbenos al +51 988 807 693",
+    "ctaLink": "https://wa.me/51988807693?text=Hola%20Victoria%20V%C3%A1squez%2C%20quisiera%20informaci%C3%B3n",
+    "ctaNota": "Respuesta en minutos • Lun - Dom"
+  },
+  "trust": [
+    {
+      "numero": "+500",
+      "texto": "peluditos atendidos"
+    },
+    {
+      "numero": "100%",
+      "texto": "amor por los animales"
+    },
+    {
+      "numero": "24/7",
+      "texto": "emergencias por WhatsApp"
+    }
+  ],
+  "servicios": [
+    {
+      "icono": "✂️🫧",
+      "titulo": "Baño y Corte",
+      "descripcion": "Diseño de acuerdo a la raza o preferencia. Guapo y oliendo rico.",
+      "activo": true
+    },
+    {
+      "icono": "💉",
+      "titulo": "Vacunas",
+      "descripcion": "Calendario completo: puppy, antirrábica, séxtuple, felinas.",
+      "activo": true
+    },
+    {
+      "icono": "🪱",
+      "titulo": "Desparasitación",
+      "descripcion": "Interna y externa. Pastillas, jarabes y pipetas de accion mixta.",
+      "activo": true
+    },
+    {
+      "icono": "🐈🐕",
+      "titulo": "Castraciones",
+      "descripcion": "Procedimiento seguro con monitoreo post-operatorio.",
+      "activo": true
+    },
+    {
+      "icono": "💜",
+      "titulo": "Esterilizaciones",
+      "descripcion": "Evita camadas y mejora su salud.",
+      "activo": true
+    },
+    {
+      "icono": "🚨",
+      "titulo": "Emergencias",
+      "descripcion": "Atención rápida por WhatsApp. Nos movemos contigo.",
+      "activo": true
+    },
+    {
+      "icono": "🩺",
+      "titulo": "Consulta general",
+      "descripcion": "Diagnóstico y tratamientos personalizados.",
+      "activo": true
+    },
+    {
+      "icono": "🦷",
+      "titulo": "Profilaxis Dental",
+      "descripcion": "Limpieza dental y cuidado bucal.",
+      "activo": true
+    },
+    {
+      "icono": "🩹",
+      "titulo": "Cirugías Menores",
+      "descripcion": "Heridas y suturas con seguimiento.",
+      "activo": true
+    },
+    {
+      "icono": "👀",
+      "titulo": "Oftalmología",
+      "descripcion": "Todo tipo de problemas visuales en perritos y gatitos.",
+      "activo": true
+    },
+    {
+      "icono": "✨",
+      "titulo": "Dermatologia",
+      "descripcion": "Problemas de piel mas frecuentes en perros y gatos.",
+      "activo": true
+    },
+    {
+      "icono": "💊",
+      "titulo": "Farmacia veterinaria",
+      "descripcion": "Calidad y garantia en productos veterinarios. ",
+      "activo": true
+    }
+  ],
+  "nosotros": {
+    "eyebrow": "Por qué Victoria Vásquez",
+    "titulo": "No somos solo veterinaria, somos familia.",
+    "descripcion": "Somos una Veterinaria Boutique en Tumán-Chiclayo que atiende con paciencia, sin jaulas frías ni prisas. Cada paciente entra con miedo y sale moviendo la cola.",
+    "valores": [
+      {
+        "titulo": "Trato humano",
+        "descripcion": "Explicamos sin tecnicismos."
+      },
+      {
+        "titulo": "Higiene total",
+        "descripcion": "Material esterilizado y productos hipoalergénicos."
+      },
+      {
+        "titulo": "Seguimiento real",
+        "descripcion": "Te escribimos post-consulta."
+      }
+    ],
+    "testimonio": "Mi perrita entró temblando y salió feliz. Se nota el amor que le tienen.",
+    "testimonioAutor": "Cliente real, Chiclayo"
+  },
+  "contacto": {
+    "titulo": "¿Tu engreído necesita atención hoy?",
+    "descripcion": "Escríbenos por WhatsApp al +51 988 807 693. Sin bots, respuesta humana.",
+    "ctaTexto": "Hablar por WhatsApp",
+    "ctaLink": "https://wa.me/51988807693?text=Hola%20Victoria%20V%C3%A1squez%2C%20quisiera%20informaci%C3%B3n",
+    "meta": "Lun - Dom 9am - 7pm • Emergencias: escríbenos siempre",
+    "chat": [
+      {
+        "texto": "Hola! 🐶 ¿En qué puedo ayudarte?",
+        "tipo": "bot"
+      },
+      {
+        "texto": "Hola Victoria, ¿hacen baño hoy para mi perrito?",
+        "tipo": "me"
+      },
+      {
+        "texto": "¡Sí! Cita a las 4pm, lo dejamos guapísimo 💚",
+        "tipo": "bot"
+      }
+    ]
+  },
+  "footer": {
+    "descripcion": "Atención Veterinaria con amor. \nVictoria Vasquez Rimarachin.\nMedico Veterinario Dipl. Oftalmologia. CMPV 15048. \nWhatsApp: +51 988 807 693",
+    "serviciosTexto": "Consultas medicas y examenes. Vacuna y desparasitacion. Intervenciones quirurgicas. Tienda de productos veterinarios. Higiene integral para mascotas. Atencion: Odontologica, Oftalmologica y Dermatologica. Farmacia veterinaria.",
+    "horario": "Lunes - Domingo 9am - 9pm\nEmergencias: WhatsApp 24h\nTumán, Chiclayo - Lambayeque - Perú.\nServicio de Baño Exclusivo: Solo Domingos\n(Si desea programar otro dia previa cita)",
+    "copy": "© 2026 Victoria Vásquez Atención Veterinaria. Hecho con amor para peluditos."
+  },
+  "whatsapp": "51988807693"
+}
