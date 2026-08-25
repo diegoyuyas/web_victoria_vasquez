@@ -55,7 +55,7 @@ body.no-scroll{overflow:hidden;position:fixed;width:100%}
 .carousel-dot{width:8px;height:8px;border-radius:999px;background:var(--line);border:0;cursor:pointer;transition:.3s}
 .carousel-dot.active{background:var(--teal);width:22px}
 
-.hero-card{position:absolute;background:rgba(255,255,255,.99);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.6);border-radius:16px;padding:12px 14px;display:flex;gap:10px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.08);font-size:14px;max-width:200px;z-index:2}
+.hero-card{position:absolute;background:rgba(255,255,255,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.6);border-radius:16px;padding:12px 14px;display:flex;gap:10px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.08);font-size:14px;max-width:200px;z-index:2}
 .hero-card span{font-size:22px}.float-1{top:12%;left:-8%;animation:float 5s ease infinite}.float-2{bottom:12%;right:-4%;animation:float 5.5s ease infinite reverse}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .trust-bar{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff;width:100%}.trust-grid{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;padding:18px 0;font-size:14px;gap:12px}.trust-grid strong{font-family:'Fraunces';font-size:18px}
@@ -124,11 +124,9 @@ body.no-scroll{overflow:hidden;position:fixed;width:100%}
     left: 10px;
     right: 168px; /* Deja 168px libres a la derecha para que no se meta detrás del 24h */
     padding: 10px 12px;
-    background: linear-gradient(to top, rgba(26,26,26,.78) 0%, rgba(26,26,26,.45) 60%, rgba(26,26,26,0) 100%);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
+    background: rgba(0,0,0,.82);
+    backdrop-filter: blur(4px);
     border-radius: 12px;
-    border: 1px solid rgba(255,255,255,.12);
     z-index: 3;
     white-space: normal;
     word-break: break-word;
