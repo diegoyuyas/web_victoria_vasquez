@@ -161,7 +161,7 @@
   "config": {
     "fondoTransparente": {
       "activo": true,
-      "opacidad": 0.06,
+      "opacidad": 0.05,
       "imagen": "",
       "tipo": "logo"
     },
@@ -257,11 +257,11 @@
     "imagen": "assets/uploads/ubicanos-1791950658940.jpg"
   },
   "sitio": {
-    "nombre": "Mi Clínica Veterinaria",
-    "titulo": "Mi Clínica Veterinaria — Cuidado para tu mascota",
+    "nombre": "Victoria Vasquez",
+    "titulo": "Página Web",
     "descripcion": "Consultas, vacunas, cirugías y emergencias para tu mascota. Agenda tu cita por WhatsApp.",
-    "url": "",
-    "ogImagen": "",
+    "url": "https://victoria-vasquez-vet.vercel.app/",
+    "ogImagen": "assets/uploads/og-1791950882485.jpg",
     "favicon": ""
   },
   "menu": {
