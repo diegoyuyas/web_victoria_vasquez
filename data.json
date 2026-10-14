@@ -2,7 +2,7 @@
   "hero": {
     "badge": "Emergencias • Atención con amor",
     "titulo": "Cuidado con amor para quienes te aman sin condiciones",
-    "descripcion": "En Victoria Vásquez atendemos a tu familia peluda como si fuera nuestra. Consultas, baños, cortes, vacunas y urgencias en Tumán–Chiclayo, con trato humano y profesional.",
+    "descripcion": "En **Victoria Vásquez** atendemos a tu familia peluda como si fuera nuestra. Consultas, baños, cortes, vacunas y urgencias en Tumán–Chiclayo, con trato humano y profesional.",
     "ctaTexto": "Escríbenos al +51 988 807 693",
     "ctaLink": "https://wa.me/51988807693?text=Hola%20Victoria%20V%C3%A1squez%2C%20quisiera%20informaci%C3%B3n",
     "ctaNota": "Respuesta en minutos • Todos los dias (Lun - Dom)",
@@ -38,7 +38,11 @@
       "icono": "✂️🫧🐾",
       "titulo": "Baño y Corte",
       "descripcion": "Diseño de acuerdo a la raza o preferencia. Guapo y oliendo rico.",
-      "activo": true
+      "activo": true,
+      "imagen": "assets/uploads/producto-1791953324276.jpg",
+      "zoom": 1,
+      "posX": 54,
+      "posY": 23
     },
     {
       "icono": "💉🐾",
