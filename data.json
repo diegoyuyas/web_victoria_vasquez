@@ -150,9 +150,9 @@
     ]
   },
   "footer": {
-    "descripcion": "Atención Veterinaria con amor ♥️\nMédico Veterinario: Victoria Vásquez Rimarachín.\nTitulada M.V - Universidad Nacional Pedro Ruiz Gallo.\nDiplomado Oftalmología. CMPV 15048\nWhatsApp: +51 988 807 693",
+    "descripcion": "**Atención Veterinaria con amor** ♥️\n**Médico Veterinario:** Victoria Vásquez Rimarachín.\nTitulada M.V - Universidad Nacional Pedro Ruiz Gallo.\nDiplomado Oftalmología. **CMPV 15048**\n**WhatsApp:** +51 988 807 693",
     "serviciosTexto": "Consultas médicas y exámenes | Vacuna y desparasitación | Intervenciones quirúrgicas | Tienda de productos veterinarios | Higiene integral para mascotas | Atención Odontológica, Oftalmológica y Dermatológica | Farmacia veterinaria.",
-    "horario": "Atención: Todos los días.\nLun - Dom 9am - 7pm\nEmergencias: WhatsApp 24h",
+    "horario": "**Atención: Todos los días.**\nLun - Dom 9am - 7pm\nEmergencias: WhatsApp 24h",
     "copy": "© 2026 Victoria Vásquez Atención Veterinaria. Hecho con amor para peluditos.",
     "tituloServicios": "Servicios",
     "tituloHorario": "Horario"
@@ -258,7 +258,7 @@
   },
   "sitio": {
     "nombre": "Victoria Vasquez",
-    "titulo": "Página Web",
+    "titulo": "Victoria Vasquez - Web informativa",
     "descripcion": "Consultas, vacunas, cirugías y emergencias para tu mascota. Agenda tu cita por WhatsApp.",
     "url": "https://victoria-vasquez-vet.vercel.app/",
     "ogImagen": "assets/uploads/og-1791950882485.jpg",
