@@ -251,10 +251,10 @@
     "titulo": "Ubícanos",
     "texto": "Encuentra nuestro punto de atención y llega fácil con Google Maps.",
     "direccion": "Lima, Perú",
-    "mapaEmbed": "",
+    "mapaEmbed": "https://maps.app.goo.gl/oi3Yt3qw3tnboeNd9",
     "enlace": "",
     "btnTexto": "Clic para saber cómo llegar",
-    "imagen": ""
+    "imagen": "assets/uploads/ubicanos-1791950658940.jpg"
   },
   "sitio": {
     "nombre": "Mi Clínica Veterinaria",
