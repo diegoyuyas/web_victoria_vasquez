@@ -1,9 +1,9 @@
 @echo off
-title Servidor Victoria Vasquez v3 - Carrusel
+title Servidor local
 color 0B
 echo ============================================
-echo  VICTORIA VASQUEZ - Servidor Local v3
-echo  Carrusel + Fondo Transparente
+echo  Servidor Local
+echo  Sitio web
 echo ============================================
 echo.
 
@@ -24,7 +24,7 @@ if not exist "data.json" (
 echo Iniciando servidor en http://localhost:8000
 echo.
 echo 1. Abre en tu navegador: http://localhost:8000
-echo 2. Abre admin.html en otra pestana para editar
+echo 2. Abre portal_admin.html en otra pestana para editar
 echo 3. Cuando exportes data.json, solo recarga con Ctrl+F5
 echo.
 echo Para detener el servidor: cierra esta ventana o presiona Ctrl+C

@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Portal Admin - Victoria Vásquez v3.1 - Auto Compresión</title>
+<title>Portal Admin</title>
+<meta name="robots" content="noindex,nofollow">
 <style>
 :root{--cream:#FFFBF5;--teal:#14A89C;--line:#EDE3D6;--charcoal:#1A1A1A}
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,sans-serif;background:var(--cream);color:var(--charcoal)}
@@ -23,32 +24,106 @@ textarea{min-height:70px;resize:vertical}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .svc-item{border:1px dashed var(--line);padding:12px;border-radius:12px;margin-bottom:10px;background:#FFFBF5}
 .small{font-size:12px;opacity:.6}
+.rich-host{margin:6px 0 4px}.rtb{display:flex;align-items:center;gap:10px;margin-bottom:4px}.rb{width:34px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;font-size:15px}.rb.on{background:var(--cream2);border-color:var(--teal)}.rte{min-height:84px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px 12px;font:inherit;line-height:1.5;outline:none}.rte:focus{border-color:var(--teal)}
+.svc-frame{width:100%;max-width:320px;aspect-ratio:4/3;overflow:hidden;border-radius:12px;border:1px solid var(--line);background:#fff;margin-top:8px}.svc-frame img{width:100%;height:100%;object-fit:cover;display:block}.enc{display:grid;grid-template-columns:90px 1fr;gap:6px 10px;align-items:center;max-width:320px;margin-top:8px;font-size:12px}.enc input{padding:0}
 .preview-img{width:100%;height:160px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#fff}
 .badge{display:inline-flex;padding:4px 8px;border-radius:999px;background:#FFF2E6;border:1px solid var(--line);font-size:11px;font-weight:700}
 @media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{display:flex;gap:8px;overflow-x:auto}.sidebar button{white-space:nowrap}}
 </style>
 </head>
 <body>
-<div class="header"><strong>Victoria Vásquez - Admin v3.1 (Compresión Auto)</strong><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost" onclick="importar()">Importar JSON</button> <button class="btn btn-ghost" onclick="copiar()">Copiar JSON</button> <button class="btn btn-teal" onclick="exportar()">Exportar data.json</button></div></div>
+<div id="login" style="position:fixed;inset:0;background:#FFF8FB;z-index:99;display:grid;place-items:center;padding:16px"><div class="card" style="width:340px;max-width:100%"><div style="text-align:center"><img src="assets/img/logo.png" alt="Logo" width="110"></div><h2 style="text-align:center;margin-top:8px">Acceso administrador</h2><label>Usuario</label><input id="lg-user" autocomplete="username" value="admin"><label>Contraseña</label><input id="lg-pass" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"><p id="lg-msg" class="small" style="color:#c0392b;margin-top:8px"></p><button class="btn btn-teal" style="width:100%;margin-top:10px" onclick="login()">Ingresar</button></div></div>
+<div id="toast" style="position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#14295F;color:#fff;padding:12px 18px;border-radius:12px;display:none;z-index:100;max-width:90%"></div>
+<div class="header"><strong id="adm-title">Panel de administración</strong><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost" onclick="importar()">Importar JSON</button> <button class="btn btn-ghost" onclick="copiar()">Copiar JSON</button> <button class="btn btn-ghost" onclick="exportar()">Descargar cambios</button> <button class="btn btn-teal" onclick="publicar()">🚀 Subir cambios</button> <button class="btn btn-ghost" onclick="cambiarClave()">🔑 Contraseña</button> <button class="btn btn-ghost" onclick="salir()">Salir</button></div></div>
 <div class="layout">
 <div class="sidebar">
 <h3>Secciones</h3>
+<button onclick="show('sitio')" id="b-sitio">🌐 Sitio, menú y SEO</button>
 <button class="active" onclick="show('hero')" id="b-hero">Inicio / Hero</button>
-<button onclick="show('carrusel')" id="b-carrusel">📸 Carrusel Dra. Victoria</button>
+<button onclick="show('whatsapp')" id="b-whatsapp">💬 WhatsApp</button>
+<button onclick="show('colores')" id="b-colores">🎨 Colores</button>
+<button onclick="show('logo')" id="b-logo">🖼️ Logo</button>
+<button onclick="show('carrusel')" id="b-carrusel">📸 Carrusel</button>
 <button onclick="show('fondo')" id="b-fondo">🎨 Fondo Transparente</button>
 <button onclick="show('trust')" id="b-trust">Barra Confianza</button>
-<button onclick="show('servicios')" id="b-servicios">Servicios</button>
+<button onclick="show('servicios')" id="b-servicios">Productos</button>
 <button onclick="show('nosotros')" id="b-nosotros">Nosotros</button>
+<button onclick="show('ubicanos')" id="b-ubicanos">📍 Ubícanos</button>
 <button onclick="show('contacto')" id="b-contacto">Contacto / Chat</button>
+<button onclick="show('secciones')" id="b-secciones">➕ Secciones nuevas</button>
 <button onclick="show('footer')" id="b-footer">Footer</button>
-<p class="small" style="margin-top:20px">AHORA: Puedes subir fotos de hasta 10MB. El sistema las comprime solo a ~300KB para que la web cargue rápido.</p>
+<p class="small" style="margin-top:20px">Fotos: hasta 5 MB cada una. Se optimizan solas y se guardan en GitHub al seleccionarlas.</p>
 </div>
 <div class="main">
-<div id="sec-hero" class="sec"><h2>Hero</h2><div class="card"><label>Badge</label><input id="hero-badge"><label>Título principal</label><textarea id="hero-titulo"></textarea><label>Descripción (puede tener HTML)</label><textarea id="hero-desc"></textarea><div class="grid2"><div><label>Texto botón</label><input id="hero-ctaTexto"></div><div><label>Link WhatsApp</label><input id="hero-ctaLink"></div></div><label>Nota debajo botón</label><input id="hero-ctaNota"></div></div>
+<div id="sec-sitio" class="sec" style="display:none"><h2>🌐 Sitio, menú y SEO</h2>
+<div class="card"><h4>Identidad y buscadores</h4>
+<label>Nombre del negocio</label><input id="si-nombre">
+<label>Título de la pestaña y de Google <span id="si-titulo-n" class="small"></span></label><input id="si-titulo">
+<label>Descripción para Google y al compartir el enlace <span id="si-desc-n" class="small"></span></label><textarea id="si-desc"></textarea>
+<label>Dirección web del sitio</label><input id="si-url" placeholder="https://mi-negocio.vercel.app">
+<h4 style="margin-top:16px">Imagen al compartir el enlace</h4>
+<p class="small">Se ajusta sola a 1200×630 px (formato de WhatsApp y Facebook). Hasta 5 MB.</p>
+<img id="si-og-prev" src="og-image.jpg" alt="" style="max-width:300px;border-radius:10px;border:1px solid var(--line);display:block;margin:6px 0">
+<input type="file" accept="image/*" onchange="handleOg(this)"><button class="btn btn-ghost" style="margin-top:6px" onclick="data.sitio.ogImagen='';renderAll();save()">Usar la imagen por defecto</button>
+<h4 style="margin-top:16px">Icono de la pestaña (favicon)</h4>
+<p class="small">Imagen cuadrada; se ajusta a 192×192 px. Hasta 5 MB.</p>
+<img id="si-fav-prev" src="assets/img/favicon.png" alt="" style="width:48px;height:48px;border-radius:8px;border:1px solid var(--line);display:block;margin:6px 0">
+<input type="file" accept="image/*" onchange="handleFavicon(this)"><button class="btn btn-ghost" style="margin-top:6px" onclick="data.sitio.favicon='';renderAll();save()">Usar el icono por defecto</button>
+</div>
+<div class="card" style="margin-top:14px"><h4>Menú superior</h4><p class="small">Nombres de los enlaces del menú.</p>
+<div class="grid2"><div><label>Inicio</label><input id="mn-inicio"></div><div><label>Productos</label><input id="mn-productos"></div><div><label>Nosotros</label><input id="mn-nosotros"></div><div><label>Ubícanos</label><input id="mn-ubicanos"></div><div><label>Contacto</label><input id="mn-contacto"></div><div><label>Botón de WhatsApp</label><input id="mn-boton"></div></div>
+</div>
+<div class="card" style="margin-top:14px"><h4>Mantenimiento</h4><label><input type="checkbox" id="si-limpiar"> Al publicar, borrar de GitHub las fotos que ya no se usan</label><p class="small">Libera espacio y evita archivos sueltos. Solo borra fotos subidas desde el portal hace más de 15 minutos.</p></div>
+<p class="small" style="margin-top:10px">El título, la descripción, la imagen y el icono se escriben en el HTML al pulsar Publicar. WhatsApp y Google pueden tardar en actualizar su vista previa.</p>
+</div>
+<div id="sec-colores" class="sec" style="display:none"><h2>🎨 Colores</h2><div class="card">
+<p class="small">Elige los colores de tu web: botones, acentos, títulos, textos y fondos se adaptan solos. Pulsa Publicar para verlos en la página.</p>
+<label>Paletas listas</label><div id="col-presets" style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px"></div>
+<div class="grid2">
+<div><label>Color principal (botones y acentos)</label><div style="display:flex;gap:8px;align-items:center"><input type="color" id="col-principal" style="width:54px;height:40px;padding:2px"><input id="col-principal-hex" maxlength="7" style="max-width:110px"></div></div>
+<div><label>Color de títulos y texto</label><div style="display:flex;gap:8px;align-items:center"><input type="color" id="col-texto" style="width:54px;height:40px;padding:2px"><input id="col-texto-hex" maxlength="7" style="max-width:110px"></div></div>
+<div><label>Color de fondo</label><div style="display:flex;gap:8px;align-items:center"><input type="color" id="col-fondo" style="width:54px;height:40px;padding:2px"><input id="col-fondo-hex" maxlength="7" style="max-width:110px"></div></div>
+</div>
+<p id="col-warn" class="small" style="color:#b45309;min-height:18px;margin-top:8px"></p>
+<label>Vista previa</label>
+<div id="col-preview" style="border:1px solid var(--line);border-radius:16px;padding:20px;margin:6px 0 12px;background:var(--cream)"><span style="display:inline-block;font-size:11px;letter-spacing:.1em;font-weight:700;color:var(--teal)">EJEMPLO</span><h3 style="font-family:Georgia,serif;font-size:24px;margin:4px 0 6px;color:var(--charcoal)">Agua pura y gas seguro</h3><p style="color:var(--charcoal);font-size:14px;margin-bottom:12px">Así se verán tus textos, botones y fondos.</p><span style="display:inline-block;background:var(--teal);color:var(--on-teal);padding:10px 18px;border-radius:999px;font-weight:600;font-size:14px">Solicitar &gt;</span> <span style="display:inline-block;background:var(--cream2);border:1px solid var(--line);color:var(--charcoal);padding:6px 12px;border-radius:999px;font-size:12px;margin-left:6px">Etiqueta</span></div>
+<button class="btn btn-ghost" onclick="restaurarColores()">Restaurar colores originales</button>
+</div></div>
+<div id="sec-logo" class="sec" style="display:none"><h2>🖼️ Logo</h2><div class="card">
+<p class="small">Sube tu nuevo logo (PNG con fondo transparente recomendado, hasta 5 MB). Se actualiza en el menú, la pantalla de carga, Nosotros, el footer, el fondo y el icono de la pestaña. La imagen que sale al compartir el enlace en redes (og-image.jpg) no cambia.</p>
+<div style="background:#FFF8FB;border:1px dashed var(--line);border-radius:12px;padding:16px;text-align:center"><img id="logo-preview" src="assets/img/logo.png" alt="Logo" style="max-width:180px;max-height:180px"></div>
+<label>Subir nuevo logo</label><input type="file" accept="image/png,image/jpeg,image/webp" onchange="handleLogo(this)">
+<button class="btn btn-ghost" style="margin-top:8px" onclick="restaurarLogo()">Restaurar logo original</button>
+</div></div>
+<div id="sec-ubicanos" class="sec" style="display:none"><h2>📍 Ubícanos</h2><div class="card">
+<label>Mostrar sección</label><select id="ubi-activo"><option value="true">Sí</option><option value="false">No</option></select>
+<label>Etiqueta pequeña</label><input id="ubi-eyebrow">
+<label>Título</label><input id="ubi-titulo">
+<label>Texto</label><div class="rich-host" id="ubi-texto"></div>
+<label>Dirección (se usa para el mapa y el botón)</label><input id="ubi-direccion" placeholder="Av. Principal 123, Lima, Perú">
+<label>Código "Insertar un mapa" de Google Maps (opcional, para el punto exacto)</label><textarea id="ubi-embed" placeholder='En Google Maps: Compartir > Insertar un mapa > Copiar HTML. Pégalo aquí.'></textarea>
+<label>Enlace del botón (opcional)</label><input id="ubi-enlace" placeholder="Si lo dejas vacío, abre la ruta hacia la dirección">
+<label>Texto del botón</label><input id="ubi-btn">
+<label>Foto al costado del mapa (opcional, hasta 5 MB)</label><input type="file" accept="image/*" onchange="handleUbiFoto(this)">
+<div id="ubi-foto-box"></div>
+</div></div>
+<div id="sec-whatsapp" class="sec" style="display:none"><h2>💬 WhatsApp</h2><div class="card">
+<p class="small">Configura el número una sola vez: se aplica al botón del menú, el botón principal, el de Contacto, el botón flotante y los botones "Solicitar" de cada producto.</p>
+<label>Número de WhatsApp (con código de país)</label><input id="wa-num" inputmode="numeric" placeholder="51987654321">
+<p class="small">Perú: si escribes 9 dígitos (ej. 987654321) se agrega el 51 automáticamente. Enlace resultante: <span id="wa-preview"></span></p>
+<label>Mensaje predeterminado (botones generales)</label><input id="wa-msg" placeholder="Hola, quisiera hacer una consulta">
+<label>Botón flotante de WhatsApp</label><select id="wa-float"><option value="true">Mostrar</option><option value="false">Ocultar</option></select>
+</div></div>
+<div id="sec-hero" class="sec"><h2>Hero</h2><div class="card"><label>Badge</label><input id="hero-badge"><label>Título principal</label><textarea id="hero-titulo"></textarea><label>Descripción</label><div class="rich-host" id="hero-desc"></div><div class="grid2"><div><label>Texto botón</label><input id="hero-ctaTexto"></div><div class="small" style="align-self:end">El link usa el número de la sección 💬 WhatsApp.</div></div><label>Nota debajo botón</label><input id="hero-ctaNota">
+<h4 style="margin-top:16px">Recuadros flotantes (sobre el carrusel)</h4><p class="small">Déjalos vacíos para ocultarlos.</p>
+<div class="grid2"><div><label>Recuadro 1: icono (emoji)</label><input id="hc1-i"></div><div><label>Destacado</label><input id="hc1-d"></div></div><label>Texto</label><input id="hc1-t">
+<div class="grid2"><div><label>Recuadro 2: icono (emoji)</label><input id="hc2-i"></div><div><label>Destacado</label><input id="hc2-d"></div></div><label>Texto</label><input id="hc2-t">
+</div></div>
 
 <div id="sec-carrusel" class="sec" style="display:none">
-<h2>📸 Carrusel - Dra. Victoria atendiendo</h2>
-<p class="small">Sube fotos de cualquier tamaño (incluso 5MB). Se comprimen automáticamente a 1200px y ~300KB en base64 para que la web vuele en celular.</p>
+<h2>📸 Carrusel de fotos</h2>
+<p class="small">Cada foto puede pesar hasta 5 MB. Se optimizan automáticamente (máx. 1600px) y se suben a GitHub como archivo, así la web carga rápido en celular.</p>
+<div class="card" style="margin-bottom:14px"><label>Mostrar el carrusel en el inicio</label><select id="car-activo"><option value="true">Sí</option><option value="false">No (el inicio se muestra solo con texto)</option></select><p class="small" style="margin-top:6px">Si lo ocultas, también se ocultan los recuadros flotantes del inicio.</p></div>
 <div id="carrusel-list"></div>
 <button class="btn btn-teal" onclick="addCarrusel()">+ Añadir foto al carrusel</button>
 </div>
@@ -73,15 +148,64 @@ textarea{min-height:70px;resize:vertical}
 </div>
 
 <div id="sec-trust" class="sec" style="display:none"><h2>Barra de Confianza</h2><div id="trust-list"></div><button class="btn btn-ghost" onclick="addTrust()">+ Añadir item</button></div>
-<div id="sec-servicios" class="sec" style="display:none"><h2>Servicios</h2><div id="servicios-list"></div><button class="btn btn-teal" onclick="addServicio()">+ Añadir Servicio</button></div>
-<div id="sec-nosotros" class="sec" style="display:none"><h2>Nosotros</h2><div class="card"><label>Eyebrow</label><input id="nos-eyebrow"><label>Título</label><textarea id="nos-titulo"></textarea><label>Descripción</label><textarea id="nos-desc"></textarea><h4 style="margin-top:12px">Valores</h4><div id="valores-list"></div><button class="btn btn-ghost" onclick="addValor()">+ Valor</button><div class="grid2" style="margin-top:12px"><div><label>Testimonio</label><textarea id="nos-test"></textarea></div><div><label>Autor testimonio</label><input id="nos-autor"></div></div></div></div>
-<div id="sec-contacto" class="sec" style="display:none"><h2>Contacto</h2><div class="card"><label>Título</label><textarea id="cont-titulo"></textarea><label>Descripción</label><textarea id="cont-desc"></textarea><div class="grid2"><div><label>Texto botón</label><input id="cont-ctaTexto"></div><div><label>Link botón</label><input id="cont-ctaLink"></div></div><label>Meta (horario)</label><input id="cont-meta"><h4 style="margin-top:12px">Chat burbujas</h4><div id="chat-list"></div><button class="btn btn-ghost" onclick="addChat()">+ Burbuja chat</button></div></div>
-<div id="sec-footer" class="sec" style="display:none"><h2>Footer</h2><div class="card"><label>Descripción</label><textarea id="foot-desc"></textarea><label>Texto servicios</label><textarea id="foot-serv"></textarea><label>Horario</label><textarea id="foot-hor"></textarea><label>Copy</label><input id="foot-copy"></div></div>
+<div id="sec-servicios" class="sec" style="display:none"><h2>Productos</h2><div class="card" style="margin-bottom:14px"><h4>Encabezado de la sección</h4><div class="grid2"><div><label>Etiqueta pequeña</label><input id="pr-eyebrow"></div><div><label>Texto del botón de cada producto</label><input id="pr-boton"></div></div><label>Título</label><input id="pr-titulo"><label>Mensaje de WhatsApp por producto (se añade el nombre del producto al final)</label><input id="pr-mensaje"></div><div id="servicios-list"></div><button class="btn btn-teal" onclick="addServicio()">+ Añadir producto</button></div>
+<div id="sec-nosotros" class="sec" style="display:none"><h2>Nosotros</h2><div class="card"><label>Eyebrow</label><input id="nos-eyebrow"><label>Título</label><textarea id="nos-titulo"></textarea><label>Descripción</label><div class="rich-host" id="nos-desc"></div><h4 style="margin-top:12px">Valores</h4><div id="valores-list"></div><button class="btn btn-ghost" onclick="addValor()">+ Valor</button><div class="grid2" style="margin-top:12px"><div><label>Testimonio</label><textarea id="nos-test"></textarea></div><div><label>Autor testimonio</label><input id="nos-autor"></div></div></div></div>
+<div id="sec-contacto" class="sec" style="display:none"><h2>Contacto</h2><div class="card"><label>Título</label><textarea id="cont-titulo"></textarea><label>Descripción</label><div class="rich-host" id="cont-desc"></div><div class="grid2"><div><label>Texto botón</label><input id="cont-ctaTexto"></div><div class="small" style="align-self:end">El link usa el número de la sección 💬 WhatsApp.</div></div><label>Meta (horario)</label><input id="cont-meta"><h4 style="margin-top:12px">Chat burbujas</h4><div id="chat-list"></div><button class="btn btn-ghost" onclick="addChat()">+ Burbuja chat</button></div></div>
+<div id="sec-secciones" class="sec" style="display:none">
+<h2>➕ Secciones nuevas</h2>
+<p class="small">Crea secciones adicionales (ej. Preguntas frecuentes, Zonas de reparto, Promociones). Aparecen en el menú de la web y puedes elegir en qué lugar de la página van.</p>
+<div id="secciones-list"></div>
+<button class="btn btn-teal" onclick="addSeccion()">+ Añadir sección</button>
+</div>
+<div id="sec-footer" class="sec" style="display:none"><h2>Footer</h2><div class="card"><div class="grid2"><div><label>Título columna 2</label><input id="ft-tserv"></div><div><label>Título columna 3</label><input id="ft-thor"></div></div><label>Descripción</label><div class="rich-host" id="foot-desc"></div><label>Texto servicios</label><textarea id="foot-serv"></textarea><label>Horario</label><div class="rich-host" id="foot-hor"></div><label>Copy</label><input id="foot-copy"></div></div>
 </div>
 </div>
 <input type="file" id="fileInput" accept=".json" style="display:none">
 <script>
 let data = null;
+/*LEGACY_DEFAULTS_START*/
+const LEGACY={
+ sitio:{nombre:'Mi Clínica Veterinaria',titulo:'Mi Clínica Veterinaria — Cuidado para tu mascota',descripcion:'Consultas, vacunas, cirugías y emergencias para tu mascota. Agenda tu cita por WhatsApp.',url:'',ogImagen:'',favicon:''},
+ menu:{inicio:'Inicio',productos:'Servicios',nosotros:'Nosotros',ubicanos:'Ubícanos',contacto:'Contacto',boton:'Agendar cita'},
+ chips:[{icono:'🐾',destacado:'Atención',texto:'con cariño'},{icono:'🩺',destacado:'Emergencias',texto:'24 horas'}],
+ productos:{eyebrow:'Servicios',titulo:'Todo lo que tu mascota necesita',botonTexto:'Agendar cita >',mensaje:'Hola, quiero agendar: '},
+ footer:{tituloServicios:'Servicios',tituloHorario:'Horario'},
+ whatsappMensaje:'Hola, quisiera agendar una cita'
+};
+/*LEGACY_DEFAULTS_END*/
+
+const API='/api/publish', isLocal=['localhost','127.0.0.1'].includes(location.hostname);
+let PW=sessionStorage.getItem('bz_pw')||'';
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(window._t);window._t=setTimeout(()=>e.style.display='none',6000);}
+async function api(body){try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});let j={};try{j=await r.json()}catch(e){}j.status=r.status;return j;}catch(e){return {ok:false,error:'Sin conexión con el servidor'}}}
+async function login(){
+  const u=document.getElementById('lg-user').value.trim(),p=document.getElementById('lg-pass').value,m=document.getElementById('lg-msg');m.textContent='';
+  let ok=false;
+  if(isLocal){ok=(u==='admin'&&p==='123123');if(!ok)m.textContent='Usuario o contraseña incorrectos';}
+  else{const j=await api({action:'login',user:u,password:p});ok=!!j.ok;if(!ok)m.textContent=j.status===404?'El servidor de publicación no está activo':(j.error||'Error');}
+  if(ok){PW=p;sessionStorage.setItem('bz_pw',p);document.getElementById('login').style.display='none';init();}
+}
+async function boot(){
+  if(isLocal){document.getElementById('login').style.display='grid';return;}
+  if(PW){const j=await api({action:'login',user:'admin',password:PW});if(j.ok){document.getElementById('login').style.display='none';return init();}}
+  document.getElementById('login').style.display='grid';
+}
+function salir(){sessionStorage.removeItem('bz_pw');location.reload();}
+async function publicar(){
+  if(isLocal){toast('Subir cambios solo funciona en la web publicada. Aquí usa "Descargar cambios".');return;}
+  if(!confirm('¿Publicar los cambios en la web?'))return;
+  toast('Subiendo cambios...');
+  const j=await api({action:'publish',user:'admin',password:PW,data});
+  if(j.ok){try{localStorage.removeItem('bz_admin_v1')}catch(e){}}
+  toast(j.ok?('✅ Cambios enviados. En 1-2 minutos se verán en la web (Ctrl+F5).'+(j.seo===false?' Aviso: no se pudo actualizar el título/SEO del HTML.':'')+(j.limpieza>0?' Se borraron '+j.limpieza+' foto(s) sin uso.':'')):'❌ '+(j.error||'Error al publicar'));
+}
+async function cambiarClave(){
+  if(isLocal){toast('Cambia la contraseña desde la web publicada.');return;}
+  const n=prompt('Nueva contraseña (mínimo 6 caracteres):');if(!n)return;
+  if(n!==prompt('Repite la nueva contraseña:')){toast('Las contraseñas no coinciden');return;}
+  const j=await api({action:'password',user:'admin',password:PW,newPassword:n});
+  if(j.ok){PW=n;sessionStorage.setItem('bz_pw',n);toast('✅ Contraseña cambiada. En 1-2 minutos queda activa.');}else toast('❌ '+(j.error||'Error'));
+}
 function show(id){
   document.querySelectorAll('.sec').forEach(s=>s.style.display='none');
   document.querySelectorAll('.sidebar button').forEach(b=>b.classList.remove('active'));
@@ -89,7 +213,7 @@ function show(id){
   document.getElementById('b-'+id).classList.add('active');
 }
 async function init(){
-  const saved = localStorage.getItem('vv_admin_v3');
+  const saved = localStorage.getItem('bz_admin_v1');
   if(saved){ try{ data = JSON.parse(saved); }catch(e){} }
   if(!data){
     const res = await fetch('data.json'); data = await res.json();
@@ -97,27 +221,38 @@ async function init(){
   if(!data.config) data.config = {fondoTransparente:{activo:true,opacidad:0.07,imagen:""}};
   if(!data.config.fondoTransparente) data.config.fondoTransparente={activo:true,opacidad:0.07,imagen:""};
   if(!data.carrusel) data.carrusel=[];
+  if(!Array.isArray(data.secciones)) data.secciones=[];
+  data.ubicacion=Object.assign({activo:true,eyebrow:'Visítanos',titulo:'Ubícanos',texto:'Encuentra nuestro punto de atención y llega fácil con Google Maps.',direccion:'Lima, Perú',mapaEmbed:'',enlace:'',btnTexto:'Clic para saber cómo llegar',imagen:''},data.ubicacion||{});
+  if(!data.config) data.config={};
+  if(data.config.carruselActivo===undefined) data.config.carruselActivo=true;
+  const cl=o=>JSON.parse(JSON.stringify(o));
+  data.sitio=Object.assign(cl(LEGACY.sitio),data.sitio||{});
+  data.menu=Object.assign(cl(LEGACY.menu),data.menu||{});
+  if(!Array.isArray(data.hero.chips)) data.hero.chips=cl(LEGACY.chips);
+  while(data.hero.chips.length<2) data.hero.chips.push({icono:'',destacado:'',texto:''});
+  data.productos=Object.assign(cl(LEGACY.productos),data.productos||{});
+  data.footer=data.footer||{}; if(data.footer.tituloServicios===undefined) data.footer.tituloServicios=LEGACY.footer.tituloServicios; if(data.footer.tituloHorario===undefined) data.footer.tituloHorario=LEGACY.footer.tituloHorario;
+  if(data.whatsappMensaje===undefined) data.whatsappMensaje=LEGACY.whatsappMensaje;
+  migrarTextos();
   renderAll();
 }
 function renderAll(){
   document.getElementById('hero-badge').value = data.hero.badge||'';
   document.getElementById('hero-titulo').value = data.hero.titulo||'';
-  document.getElementById('hero-desc').value = data.hero.descripcion||'';
   document.getElementById('hero-ctaTexto').value = data.hero.ctaTexto||'';
-  document.getElementById('hero-ctaLink').value = data.hero.ctaLink||'';
   document.getElementById('hero-ctaNota').value = data.hero.ctaNota||'';
   const cl = document.getElementById('carrusel-list'); cl.innerHTML='';
   data.carrusel.forEach((c,i)=>{
     const d=document.createElement('div'); d.className='card';
-    const hasImg = c.imagen && c.imagen.startsWith('data:image');
+    const hasImg = !!c.imagen;
     let sizeInfo = '';
-    if(hasImg){ const kb = Math.round((c.imagen.length*3/4)/1024); sizeInfo = `<span class="badge">${kb} KB comprimido</span>`; }
+    if(hasImg){ const kb = c.imagen.startsWith('data:') ? Math.round((c.imagen.length*3/4)/1024) : sizes[c.imagen]; if(kb) sizeInfo = `<span class="badge">${kb} KB optimizada</span>`; }
     d.innerHTML=`
       <div class="grid2">
         <div>
-          <label>Foto ${i+1} - Arrastra o selecciona (hasta 10MB) ${sizeInfo}</label>
+          <label>Foto ${i+1} - Selecciona (hasta 5 MB) ${sizeInfo}</label>
           <input type="file" accept="image/*" onchange="handleCarruselFile(this, ${i})">
-          ${hasImg?`<img src="${c.imagen}" class="preview-img" style="margin-top:8px">`:`<div class="preview-img" style="display:grid;place-items:center;opacity:.5">Sin foto - sube una</div>`}
+          ${hasImg?`<img src="${imgSrc(c.imagen)}" class="preview-img" style="margin-top:8px">`:`<div class="preview-img" style="display:grid;place-items:center;opacity:.5">Sin foto - sube una</div>`}
           <label style="margin-top:8px">Estado</label>
           <select onchange="data.carrusel[${i}].activo=this.value==='true';save()"><option value="true" ${c.activo!==false?'selected':''}>Activo</option><option value="false" ${c.activo===false?'selected':''}>Oculto</option></select>
         </div>
@@ -146,12 +281,20 @@ function renderAll(){
   const sl = document.getElementById('servicios-list'); sl.innerHTML='';
   data.servicios.forEach((s,i)=>{
     const d=document.createElement('div'); d.className='svc-item';
-    d.innerHTML=`<div class="grid2"><div><label>Icono (emoji)</label><input value="${s.icono||''}" oninput="data.servicios[${i}].icono=this.value;save()"></div><div><label>Activo</label><select onchange="data.servicios[${i}].activo=this.value==='true';save()"><option value="true" ${s.activo!==false?'selected':''}>Sí</option><option value="false" ${s.activo===false?'selected':''}>No</option></select></div></div><label>Título</label><input value="${(s.titulo||'').replace(/"/g,'&quot;')}" oninput="data.servicios[${i}].titulo=this.value;save()"><label>Descripción</label><textarea oninput="data.servicios[${i}].descripcion=this.value;save()">${s.descripcion||''}</textarea><button class="btn btn-ghost" onclick="data.servicios.splice(${i},1);renderAll();save()">Eliminar servicio</button>`;
+    const kb = s.imagen ? (s.imagen.startsWith('data:') ? Math.round(s.imagen.length*0.75/1024) : sizes[s.imagen]) : 0;
+    const foto = s.imagen ? `
+      <div class="svc-frame"><img id="svcimg-${i}" src="${ea(imgSrc(s.imagen))}" style="${encStyle(s)}"></div>
+      <div class="enc">
+        <span>Zoom</span><input type="range" min="1" max="3" step="0.05" value="${num(s.zoom,1,1,3)}" oninput="setEnc(${i},'zoom',this.value)">
+        <span>Horizontal</span><input type="range" min="0" max="100" step="1" value="${num(s.posX,50,0,100)}" oninput="setEnc(${i},'posX',this.value)">
+        <span>Vertical</span><input type="range" min="0" max="100" step="1" value="${num(s.posY,50,0,100)}" oninput="setEnc(${i},'posY',this.value)">
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center"><button class="btn btn-ghost" onclick="resetEnc(${i})">Restablecer encuadre</button><button class="btn btn-ghost" style="color:red;border-color:red" onclick="quitarFotoServicio(${i})">Quitar foto</button>${kb?`<span class="badge">${kb} KB optimizada</span>`:''}</div>` : '';
+    d.innerHTML=`<div class="grid2"><div><label>Icono (emoji, se usa si no hay foto)</label><input value="${ea(s.icono)}" oninput="data.servicios[${i}].icono=this.value;save()"></div><div><label>Activo</label><select onchange="data.servicios[${i}].activo=this.value==='true';save()"><option value="true" ${s.activo!==false?'selected':''}>Sí</option><option value="false" ${s.activo===false?'selected':''}>No</option></select></div></div><label>Título</label><input value="${ea(s.titulo)}" oninput="data.servicios[${i}].titulo=this.value;save()"><label>Descripción</label><div class="rich-host" data-path="servicios.${i}.descripcion"></div><label>${s.imagen?'Reemplazar foto':'Foto (opcional)'} — hasta 5 MB</label><input type="file" accept="image/*" onchange="handleServicioFoto(this,${i})">${foto}<div style="margin-top:10px"><button class="btn btn-ghost" onclick="data.servicios.splice(${i},1);renderAll();save()">Eliminar servicio</button></div>`;
     sl.appendChild(d);
   });
   document.getElementById('nos-eyebrow').value = data.nosotros.eyebrow||'';
   document.getElementById('nos-titulo').value = data.nosotros.titulo||'';
-  document.getElementById('nos-desc').value = data.nosotros.descripcion||'';
   document.getElementById('nos-test').value = data.nosotros.testimonio||'';
   document.getElementById('nos-autor').value = data.nosotros.testimonioAutor||'';
   const vl = document.getElementById('valores-list'); vl.innerHTML='';
@@ -161,9 +304,7 @@ function renderAll(){
     vl.appendChild(d);
   });
   document.getElementById('cont-titulo').value = data.contacto.titulo||'';
-  document.getElementById('cont-desc').value = data.contacto.descripcion||'';
   document.getElementById('cont-ctaTexto').value = data.contacto.ctaTexto||'';
-  document.getElementById('cont-ctaLink').value = data.contacto.ctaLink||'';
   document.getElementById('cont-meta').value = data.contacto.meta||'';
   const chatL = document.getElementById('chat-list'); chatL.innerHTML='';
   data.contacto.chat.forEach((c,i)=>{
@@ -171,32 +312,30 @@ function renderAll(){
     d.innerHTML=`<div><label>Texto</label><input value="${(c.texto||'').replace(/"/g,'&quot;')}" oninput="data.contacto.chat[${i}].texto=this.value;save()"></div><div><label>Tipo</label><select onchange="data.contacto.chat[${i}].tipo=this.value;save()"><option value="bot" ${c.tipo==='bot'?'selected':''}>Bot (blanco)</option><option value="me" ${c.tipo==='me'?'selected':''}>Yo (oscuro)</option></select></div><button class="btn btn-ghost" onclick="data.contacto.chat.splice(${i},1);renderAll();save()" style="grid-column:span 2">Eliminar</button>`;
     chatL.appendChild(d);
   });
-  document.getElementById('foot-desc').value = data.footer.descripcion||'';
   document.getElementById('foot-serv').value = data.footer.serviciosTexto||'';
-  document.getElementById('foot-hor').value = data.footer.horario||'';
   document.getElementById('foot-copy').value = data.footer.copy||'';
+  renderSecciones();
+  renderWhatsapp();
+  renderUbicacionAdmin();
+  renderLogoAdmin();
+  renderColoresAdmin();
+  renderSitioAdmin();
+  renderRichAll();
   document.getElementById('hero-badge').oninput = e=>{data.hero.badge=e.target.value;save()};
   document.getElementById('hero-titulo').oninput = e=>{data.hero.titulo=e.target.value;save()};
-  document.getElementById('hero-desc').oninput = e=>{data.hero.descripcion=e.target.value;save()};
   document.getElementById('hero-ctaTexto').oninput = e=>{data.hero.ctaTexto=e.target.value;save()};
-  document.getElementById('hero-ctaLink').oninput = e=>{data.hero.ctaLink=e.target.value;save()};
   document.getElementById('hero-ctaNota').oninput = e=>{data.hero.ctaNota=e.target.value;save()};
   document.getElementById('nos-eyebrow').oninput = e=>{data.nosotros.eyebrow=e.target.value;save()};
   document.getElementById('nos-titulo').oninput = e=>{data.nosotros.titulo=e.target.value;save()};
-  document.getElementById('nos-desc').oninput = e=>{data.nosotros.descripcion=e.target.value;save()};
   document.getElementById('nos-test').oninput = e=>{data.nosotros.testimonio=e.target.value;save()};
   document.getElementById('nos-autor').oninput = e=>{data.nosotros.testimonioAutor=e.target.value;save()};
   document.getElementById('cont-titulo').oninput = e=>{data.contacto.titulo=e.target.value;save()};
-  document.getElementById('cont-desc').oninput = e=>{data.contacto.descripcion=e.target.value;save()};
   document.getElementById('cont-ctaTexto').oninput = e=>{data.contacto.ctaTexto=e.target.value;save()};
-  document.getElementById('cont-ctaLink').oninput = e=>{data.contacto.ctaLink=e.target.value;save()};
   document.getElementById('cont-meta').oninput = e=>{data.contacto.meta=e.target.value;save()};
-  document.getElementById('foot-desc').oninput = e=>{data.footer.descripcion=e.target.value;save()};
   document.getElementById('foot-serv').oninput = e=>{data.footer.serviciosTexto=e.target.value;save()};
-  document.getElementById('foot-hor').oninput = e=>{data.footer.horario=e.target.value;save()};
   document.getElementById('foot-copy').oninput = e=>{data.footer.copy=e.target.value;save()};
 }
-function save(){ localStorage.setItem('vv_admin_v3', JSON.stringify(data)); }
+function save(){ try{ localStorage.setItem('bz_admin_v1', JSON.stringify(data)); }catch(e){} }
 function renderFondoPreview(){
   const img = document.getElementById('fondo-preview');
   const src = data.config.fondoTransparente.imagen;
@@ -204,49 +343,286 @@ function renderFondoPreview(){
   else img.src = '';
   img.style.opacity = data.config.fondoTransparente.opacidad||0.07;
 }
-// COMPRESION AUTOMATICA DE IMAGENES
-function compressImage(file, maxWidth, quality, callback){
-  const reader = new FileReader();
-  reader.onload = function(e){
-    const img = new Image();
-    img.onload = function(){
-      let w = img.width, h = img.height;
-      if(w > maxWidth){ h = Math.round((maxWidth/w)*h); w = maxWidth; }
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, w, h);
-      const dataUrl = canvas.toDataURL('image/jpeg', quality);
-      callback(dataUrl);
+// IMAGENES: hasta 5 MB de origen; se optimizan y (en la web publicada) se suben a GitHub como archivo
+const MAX_MB=5, previews={}, sizes={};
+const imgSrc=p=>previews[p]||p;
+const ea=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function prepararImagen(file,maxW,maxBytes,opts){
+  return new Promise((ok,fail)=>{
+    const url=URL.createObjectURL(file), img=new Image();
+    img.onerror=()=>{URL.revokeObjectURL(url);fail(new Error('No se pudo leer la imagen'))};
+    img.onload=()=>{
+      URL.revokeObjectURL(url);
+      let w=img.width,h=img.height; if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}
+      if(opts&&opts.png){ for(let k=0;k<8;k++){ const c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h); const d=c.toDataURL('image/png'); if(d.length*0.75<=maxBytes) return ok(d); w=Math.round(w*0.8); h=Math.round(h*0.8); } return fail(new Error('No se pudo reducir el logo lo suficiente')); }
+      for(let intento=0;intento<6;intento++){
+        const c=document.createElement('canvas'); c.width=w; c.height=h;
+        const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,w,h); x.drawImage(img,0,0,w,h);
+        for(let q=0.88;q>=0.5;q-=0.1){
+          const d=c.toDataURL('image/jpeg',q);
+          if(d.length*0.75<=maxBytes) return ok(d);
+        }
+        w=Math.round(w*0.8); h=Math.round(h*0.8);
+      }
+      fail(new Error('No se pudo reducir la imagen lo suficiente'));
     };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-function handleCarruselFile(input, idx){
-  const file = input.files[0]; if(!file) return;
-  if(file.size > 10*1024*1024){ alert('Archivo muy grande, máximo 10MB'); return; }
-  // muestra cargando
-  input.parentElement.innerHTML += '<p class="small">Comprimiendo...</p>';
-  compressImage(file, 1200, 0.75, function(compressed){
-    data.carrusel[idx].imagen = compressed;
-    renderAll(); save();
+    img.src=url;
   });
 }
-function handleFondoFile(input){
-  const file = input.files[0]; if(!file) return;
-  compressImage(file, 800, 0.7, function(compressed){
-    data.config.fondoTransparente.imagen = compressed;
-    renderAll(); save();
-  });
+async function guardarImagen(dataUrl,prefijo){
+  if(isLocal) return dataUrl; // en local se guarda en base64 dentro de data.json
+  const name=prefijo+'-'+Date.now()+(dataUrl.startsWith('data:image/png')?'.png':'.jpg');
+  toast('Subiendo imagen a GitHub...');
+  const j=await api({action:'upload',user:'admin',password:PW,name,content:dataUrl.split(',')[1]});
+  if(!j.ok) throw new Error(j.error||'No se pudo subir la imagen');
+  previews[j.path]=dataUrl; sizes[j.path]=Math.round(dataUrl.length*0.75/1024);
+  return j.path;
+}
+function validarArchivo(file,input){
+  if(!file.type.startsWith('image/')){alert('Selecciona un archivo de imagen');input.value='';return false;}
+  if(file.size>MAX_MB*1024*1024){alert('La imagen pesa '+(file.size/1048576).toFixed(1)+' MB. El máximo es '+MAX_MB+' MB.');input.value='';return false;}
+  return true;
+}
+async function handleCarruselFile(input, idx){
+  const file=input.files[0]; if(!file||!validarArchivo(file,input)) return;
+  toast('Procesando imagen...');
+  try{
+    const url=await prepararImagen(file,1600,2.8*1024*1024);
+    data.carrusel[idx].imagen=await guardarImagen(url,'carrusel');
+    renderAll(); save(); toast('✅ Imagen lista');
+  }catch(e){ toast('❌ '+e.message); }
+}
+async function handleSeccionImg(input,i){
+  const file=input.files[0]; if(!file||!validarArchivo(file,input)) return;
+  toast('Procesando imagen...');
+  try{
+    const url=await prepararImagen(file,1600,2.8*1024*1024);
+    data.secciones[i].imagen=await guardarImagen(url,'seccion');
+    renderAll(); save(); toast('✅ Imagen lista');
+  }catch(e){ toast('❌ '+e.message); }
+}
+async function handleFondoFile(input){
+  const file = input.files[0]; if(!file||!validarArchivo(file,input)) return;
+  try{ data.config.fondoTransparente.imagen = await prepararImagen(file,800,300*1024); renderAll(); save(); }catch(e){ toast('❌ '+e.message); }
 }
 function moveCarrusel(i,dir){
   const j = i+dir; if(j<0 || j>=data.carrusel.length) return;
   const tmp = data.carrusel[i]; data.carrusel[i]=data.carrusel[j]; data.carrusel[j]=tmp;
   renderAll(); save();
 }
-function addCarrusel(){ data.carrusel.push({id:Date.now().toString(),titulo:"Nueva foto",descripcion:"Dra. Victoria",imagen:"",activo:true}); renderAll(); save(); }
-function addServicio(){ data.servicios.push({icono:"🐾",titulo:"Nuevo Servicio",descripcion:"Descripción",activo:true}); renderAll(); save(); }
+function addCarrusel(){ data.carrusel.push({id:Date.now().toString(),titulo:"Nueva foto",descripcion:"Descripción",imagen:"",activo:true}); renderAll(); save(); }
+function addSeccion(){ data.secciones.push({id:Date.now().toString(),menu:'Nueva sección',titulo:'Nueva sección',eyebrow:'',texto:'',imagen:'',ctaTexto:'',ctaLink:'',items:[],despues:'nosotros',enMenu:true,activo:true}); renderAll(); save(); }
+function moveSeccion(i,dir){ const j=i+dir; if(j<0||j>=data.secciones.length) return; const t=data.secciones[i]; data.secciones[i]=data.secciones[j]; data.secciones[j]=t; renderAll(); save(); }
+function delSeccion(i){ if(confirm('¿Eliminar esta sección? Desaparecerá de la web al publicar.')){ data.secciones.splice(i,1); renderAll(); save(); } }
+function addItemSec(i){ data.secciones[i].items=data.secciones[i].items||[]; data.secciones[i].items.push({icono:'✨',titulo:'Nuevo elemento',descripcion:'Descripción'}); renderAll(); save(); }
+function delItemSec(i,k){ data.secciones[i].items.splice(k,1); renderAll(); save(); }
+function renderSecciones(){
+  const l=document.getElementById('secciones-list'); if(!l) return; l.innerHTML='';
+  if(!data.secciones.length){ l.innerHTML='<p class="small" style="margin:12px 0">Aún no hay secciones nuevas. Pulsa "+ Añadir sección".</p>'; return; }
+  const pos=[['inicio','Después de Inicio'],['servicios','Después de Productos'],['nosotros','Después de Nosotros'],['contacto','Antes de Contacto']];
+  data.secciones.forEach((s,i)=>{
+    const d=document.createElement('div'); d.className='card';
+    const items=(s.items||[]).map((it,k)=>`<div class="svc-item"><div class="grid2"><div><label>Icono (emoji)</label><input value="${ea(it.icono)}" oninput="data.secciones[${i}].items[${k}].icono=this.value;save()"></div><div><label>Título</label><input value="${ea(it.titulo)}" oninput="data.secciones[${i}].items[${k}].titulo=this.value;save()"></div></div><label>Descripción</label><textarea oninput="data.secciones[${i}].items[${k}].descripcion=this.value;save()">${ea(it.descripcion)}</textarea><button class="btn btn-ghost" onclick="delItemSec(${i},${k})">Quitar elemento</button></div>`).join('');
+    d.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><strong>Sección ${i+1}: ${ea(s.menu||s.titulo)}</strong><div style="display:flex;gap:6px"><button class="btn btn-ghost" onclick="moveSeccion(${i},-1)">↑</button><button class="btn btn-ghost" onclick="moveSeccion(${i},1)">↓</button><button class="btn btn-ghost" style="color:red;border-color:red" onclick="delSeccion(${i})">Eliminar</button></div></div>
+      <div class="grid2">
+        <div><label>Nombre en el menú</label><input value="${ea(s.menu)}" oninput="data.secciones[${i}].menu=this.value;save()"></div>
+        <div><label>Posición en la página</label><select onchange="data.secciones[${i}].despues=this.value;save()">${pos.map(p=>`<option value="${p[0]}" ${(s.despues||'contacto')===p[0]?'selected':''}>${p[1]}</option>`).join('')}</select></div>
+        <div><label>Mostrar en el menú</label><select onchange="data.secciones[${i}].enMenu=this.value==='true';save()"><option value="true" ${s.enMenu!==false?'selected':''}>Sí</option><option value="false" ${s.enMenu===false?'selected':''}>No</option></select></div>
+        <div><label>Estado</label><select onchange="data.secciones[${i}].activo=this.value==='true';save()"><option value="true" ${s.activo!==false?'selected':''}>Visible</option><option value="false" ${s.activo===false?'selected':''}>Oculta</option></select></div>
+      </div>
+      <label>Etiqueta pequeña (opcional)</label><input value="${ea(s.eyebrow)}" oninput="data.secciones[${i}].eyebrow=this.value;save()">
+      <label>Título</label><input value="${ea(s.titulo)}" oninput="data.secciones[${i}].titulo=this.value;save()">
+      <label>Texto</label><div class="rich-host" data-path="secciones.${i}.texto"></div>
+      <label>Imagen (opcional, hasta 5 MB)</label><input type="file" accept="image/*" onchange="handleSeccionImg(this,${i})">
+      ${s.imagen?`<img src="${ea(imgSrc(s.imagen))}" class="preview-img" style="margin-top:8px;height:120px"><button class="btn btn-ghost" style="margin-top:6px" onclick="data.secciones[${i}].imagen='';renderAll();save()">Quitar imagen</button>`:''}
+      <div class="grid2"><div><label>Texto del botón (opcional)</label><input value="${ea(s.ctaTexto)}" oninput="data.secciones[${i}].ctaTexto=this.value;save()"></div><div><label>Link del botón</label><input value="${ea(s.ctaLink)}" oninput="data.secciones[${i}].ctaLink=this.value;save()"></div></div>
+      <h4 style="margin:14px 0 8px">Tarjetas (opcional)</h4>${items}<button class="btn btn-ghost" onclick="addItemSec(${i})">+ Añadir tarjeta</button>`;
+    l.appendChild(d);
+  });
+}
+const num=(v,d,min,max)=>{v=parseFloat(v);return isFinite(v)?Math.min(max,Math.max(min,v)):d};
+function encStyle(s){const x=num(s.posX,50,0,100),y=num(s.posY,50,0,100),z=num(s.zoom,1,1,3);return `object-position:${x}% ${y}%;transform:scale(${z});transform-origin:${x}% ${y}%`;}
+function setEnc(i,k,v){data.servicios[i][k]=parseFloat(v);const im=document.getElementById('svcimg-'+i);if(im)im.setAttribute('style',encStyle(data.servicios[i]));save();}
+function resetEnc(i){const s=data.servicios[i];delete s.zoom;delete s.posX;delete s.posY;renderAll();save();}
+function quitarFotoServicio(i){const s=data.servicios[i];s.imagen='';delete s.zoom;delete s.posX;delete s.posY;renderAll();save();}
+async function handleServicioFoto(input,i){
+  const file=input.files[0]; if(!file||!validarArchivo(file,input)) return;
+  toast('Procesando imagen...');
+  try{
+    const url=await prepararImagen(file,1200,2.8*1024*1024);
+    const s=data.servicios[i]; s.imagen=await guardarImagen(url,'producto'); delete s.zoom;delete s.posX;delete s.posY;
+    renderAll(); save(); toast('✅ Foto lista');
+  }catch(e){ toast('❌ '+e.message); }
+}
+function renderWhatsapp(){
+  const n=document.getElementById('wa-num'),m=document.getElementById('wa-msg'),f=document.getElementById('wa-float'); if(!n) return;
+  n.value=data.whatsapp||''; m.value=data.whatsappMensaje||''; f.value=data.whatsappFlotante===false?'false':'true';
+  const prev=()=>{document.getElementById('wa-preview').textContent=data.whatsapp?('https://wa.me/'+data.whatsapp):'(escribe tu número)';};
+  n.oninput=e=>{data.whatsapp=e.target.value.replace(/\D/g,'').slice(0,15);e.target.value=data.whatsapp;prev();save()};
+  n.onchange=e=>{if(/^9\d{8}$/.test(data.whatsapp)){data.whatsapp='51'+data.whatsapp;e.target.value=data.whatsapp;prev();save()}};
+  m.oninput=e=>{data.whatsappMensaje=e.target.value;save()};
+  f.onchange=e=>{data.whatsappFlotante=e.target.value==='true';save()};
+  prev();
+}
+function renderUbicacionAdmin(){
+  const u=data.ubicacion, g=id=>document.getElementById(id); if(!g('ubi-titulo')) return;
+  g('ubi-activo').value=u.activo===false?'false':'true'; g('ubi-eyebrow').value=u.eyebrow||''; g('ubi-titulo').value=u.titulo||''; 
+  g('ubi-direccion').value=u.direccion||''; g('ubi-embed').value=u.mapaEmbed||''; g('ubi-enlace').value=u.enlace||''; g('ubi-btn').value=u.btnTexto||'';
+  g('ubi-activo').onchange=e=>{u.activo=e.target.value==='true';save()};
+  [['ubi-eyebrow','eyebrow'],['ubi-titulo','titulo'],['ubi-direccion','direccion'],['ubi-embed','mapaEmbed'],['ubi-enlace','enlace'],['ubi-btn','btnTexto']].forEach(([id,k])=>{g(id).oninput=e=>{u[k]=e.target.value;save()}});
+  const kb=u.imagen?(u.imagen.startsWith('data:')?Math.round(u.imagen.length*0.75/1024):sizes[u.imagen]):0;
+  g('ubi-foto-box').innerHTML=u.imagen?`<img src="${ea(imgSrc(u.imagen))}" class="preview-img" style="margin-top:8px;max-width:320px"><div style="display:flex;gap:6px;align-items:center;margin-top:6px"><button class="btn btn-ghost" style="color:red;border-color:red" onclick="data.ubicacion.imagen='';renderAll();save()">Quitar foto</button>${kb?`<span class="badge">${kb} KB optimizada</span>`:''}</div>`:'';
+}
+async function handleUbiFoto(input){
+  const file=input.files[0]; if(!file||!validarArchivo(file,input)) return;
+  toast('Procesando imagen...');
+  try{ const url=await prepararImagen(file,1400,2.8*1024*1024); data.ubicacion.imagen=await guardarImagen(url,'ubicanos'); renderAll(); save(); toast('✅ Foto lista'); }catch(e){ toast('❌ '+e.message); }
+}
+const COLOR_DEF={principal:'#E8478B',texto:'#14295F',fondo:'#FFF8FB'};
+const COLOR_PRESETS=[{n:'Rosa original',principal:'#E8478B',texto:'#14295F',fondo:'#FFF8FB'},{n:'Azul agua',principal:'#1E88E5',texto:'#0D2B4E',fondo:'#F4FAFF'},{n:'Verde fresco',principal:'#2E9E6B',texto:'#12332A',fondo:'#F3FBF7'},{n:'Naranja',principal:'#F2711C',texto:'#3B2314',fondo:'#FFF8F2'},{n:'Morado',principal:'#7C4DDB',texto:'#2A1B4D',fondo:'#F8F5FF'},{n:'Rojo',principal:'#D93A3A',texto:'#2B1414',fondo:'#FFF6F6'}];
+const hexOk=h=>/^#[0-9a-fA-F]{6}$/.test(h||'');
+const h2r=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16));
+const r2h=r=>'#'+r.map(v=>Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('');
+const mixC=(a,b,t)=>{const x=h2r(a),y=h2r(b);return r2h(x.map((v,i)=>v+(y[i]-v)*t));};
+const lumC=h=>{const c=h2r(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*c[0]+.7152*c[1]+.0722*c[2];};
+const ratioC=(a,b)=>{const x=lumC(a),y=lumC(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
+function colorVars(c){
+  const p=hexOk(c.principal)?c.principal:COLOR_DEF.principal,t=hexOk(c.texto)?c.texto:COLOR_DEF.texto,f=hexOk(c.fondo)?c.fondo:COLOR_DEF.fondo;
+  const l=lumC(p),onP=(1.05/(l+.05))>=3?'#ffffff':'#111111';
+  return {'--teal':p,'--teal2':mixC(p,'#000000',.15),'--on-teal':onP,'--charcoal':t,'--blue':t,'--cream':f,'--cream-rgb':h2r(f).join(','),'--cream2':mixC(f,p,.12),'--line':mixC(f,p,.15)};
+}
+function colActual(){return Object.assign({},COLOR_DEF,data.config.colores||{});}
+function pintarPreview(){
+  const c=colActual(),v=colorVars(c),el=document.getElementById('col-preview'); if(!el) return;
+  Object.keys(v).forEach(k=>el.style.setProperty(k,v[k]));
+  const w=[]; const onP=v['--on-teal'];
+  if(ratioC(c.texto,c.fondo)<4.5||ratioC(c.texto,'#ffffff')<4.5) w.push('El color de texto tiene poco contraste con el fondo o con las tarjetas blancas: puede costar leerlo.');
+  if(ratioC(c.principal,onP)<3) w.push('El color principal tiene poco contraste con el texto de los botones.');
+  document.getElementById('col-warn').textContent=w.join(' ');
+}
+function setColor(k,val){
+  if(!hexOk(val)) return;
+  data.config.colores=Object.assign(colActual(),{[k]:val.toUpperCase()}); save();
+  ['principal','texto','fondo'].forEach(n=>{const c=colActual()[n];const a=document.getElementById('col-'+n),h=document.getElementById('col-'+n+'-hex'); if(a&&a.value.toLowerCase()!==c.toLowerCase()) a.value=c.toLowerCase(); if(h&&k!==n&&h.value.toLowerCase()!==c.toLowerCase()) h.value=c; if(h&&k===n&&document.activeElement!==h) h.value=c;});
+  pintarPreview();
+}
+function aplicarPaleta(i){const p=COLOR_PRESETS[i]; data.config.colores={principal:p.principal,texto:p.texto,fondo:p.fondo}; save(); renderColoresAdmin();}
+function restaurarColores(){ if(confirm('¿Volver a los colores originales?')){ delete data.config.colores; save(); renderColoresAdmin(); } }
+function renderColoresAdmin(){
+  const box=document.getElementById('col-presets'); if(!box) return;
+  const c=colActual();
+  box.innerHTML=COLOR_PRESETS.map((p,i)=>`<button class="btn btn-ghost" onclick="aplicarPaleta(${i})" style="display:flex;gap:6px;align-items:center;padding:6px 10px"><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${p.principal}"></span><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${p.texto}"></span><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${p.fondo};border:1px solid #ccc"></span>${p.n}</button>`).join('');
+  ['principal','texto','fondo'].forEach(n=>{
+    const a=document.getElementById('col-'+n),h=document.getElementById('col-'+n+'-hex');
+    a.value=c[n].toLowerCase(); h.value=c[n].toUpperCase();
+    a.oninput=e=>setColor(n,e.target.value);
+    h.oninput=e=>{let v=e.target.value.trim(); if(v&&v[0]!=='#') v='#'+v; setColor(n,v);};
+  });
+  pintarPreview();
+}
+function prepararRecorte(file,W,H,png){
+  return new Promise((ok,fail)=>{
+    const url=URL.createObjectURL(file), img=new Image();
+    img.onerror=()=>{URL.revokeObjectURL(url);fail(new Error('No se pudo leer la imagen'))};
+    img.onload=()=>{
+      URL.revokeObjectURL(url);
+      const c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+      if(!png){x.fillStyle='#fff';x.fillRect(0,0,W,H);}
+      const k=Math.max(W/img.width,H/img.height), w=img.width*k, h=img.height*k;
+      x.drawImage(img,(W-w)/2,(H-h)/2,w,h);
+      if(png) return ok(c.toDataURL('image/png'));
+      let d=''; for(let q=0.85;q>=0.45;q-=0.1){ d=c.toDataURL('image/jpeg',q); if(d.length*0.75<=290*1024) break; }
+      ok(d);
+    };
+    img.src=url;
+  });
+}
+async function handleOg(input){
+  const file=input.files[0]; if(!file||!validarArchivo(file,input)) return;
+  toast('Procesando imagen...');
+  try{ const url=await prepararRecorte(file,1200,630,false); data.sitio.ogImagen=await guardarImagen(url,'og'); renderAll(); save(); toast('✅ Imagen lista'); }catch(e){ toast('❌ '+e.message); }
+}
+async function handleFavicon(input){
+  const file=input.files[0]; if(!file||!validarArchivo(file,input)) return;
+  toast('Procesando icono...');
+  try{ const url=await prepararRecorte(file,192,192,true); data.sitio.favicon=await guardarImagen(url,'favicon'); renderAll(); save(); toast('✅ Icono listo'); }catch(e){ toast('❌ '+e.message); }
+}
+function renderSitioAdmin(){
+  const g=id=>document.getElementById(id); if(!g('si-nombre')) return;
+  g('car-activo').value=data.config.carruselActivo===false?'false':'true'; g('car-activo').onchange=e=>{data.config.carruselActivo=e.target.value==='true';save();};
+  g('si-limpiar').checked=data.config.limpiarFotos!==false; g('si-limpiar').onchange=e=>{data.config.limpiarFotos=e.target.checked;save();};
+  const act=()=>{
+    const n=data.sitio.nombre||''; g('adm-title').textContent=(n?n+' - ':'')+'Panel de administración'; document.title=(n?n+' - ':'')+'Portal Admin';
+    const tl=(data.sitio.titulo||'').length, dl=(data.sitio.descripcion||'').length;
+    g('si-titulo-n').textContent='('+tl+'/60 recomendado)'; g('si-titulo-n').style.color=tl>60?'#b45309':'';
+    g('si-desc-n').textContent='('+dl+'/160 recomendado)'; g('si-desc-n').style.color=dl>160?'#b45309':'';
+  };
+  const bind=(id,obj,key)=>{const e=g(id); if(!e) return; e.value=obj[key]||''; e.oninput=ev=>{obj[key]=ev.target.value;save();act();};};
+  [['si-nombre','nombre'],['si-titulo','titulo'],['si-desc','descripcion'],['si-url','url']].forEach(([id,k])=>bind(id,data.sitio,k));
+  ['inicio','productos','nosotros','ubicanos','contacto','boton'].forEach(k=>bind('mn-'+k,data.menu,k));
+  [0,1].forEach(i=>{const c=data.hero.chips[i]; bind('hc'+(i+1)+'-i',c,'icono'); bind('hc'+(i+1)+'-d',c,'destacado'); bind('hc'+(i+1)+'-t',c,'texto');});
+  [['eyebrow','eyebrow'],['boton','botonTexto'],['titulo','titulo'],['mensaje','mensaje']].forEach(([a,k])=>bind('pr-'+a,data.productos,k));
+  bind('ft-tserv',data.footer,'tituloServicios'); bind('ft-thor',data.footer,'tituloHorario');
+  g('si-og-prev').src=data.sitio.ogImagen?imgSrc(data.sitio.ogImagen):'og-image.jpg';
+  g('si-fav-prev').src=data.sitio.favicon?imgSrc(data.sitio.favicon):'assets/img/favicon.png';
+  act();
+}
+// ---- Editor de texto simple: negrita y saltos de línea (se guarda como **negrita** y \n) ----
+const richSet=new Set();
+document.addEventListener('selectionchange',()=>{ const sel=document.getSelection(); richSet.forEach(r=>{ if(!r.ed.isConnected){richSet.delete(r);return;} if(sel&&sel.anchorNode&&r.ed.contains(sel.anchorNode)) r.btn.classList.toggle('on',document.queryCommandState('bold')); }); });
+function legacyMd(t){ return String(t==null?'':t).replace(/<\s*\/?\s*(?:strong|b)\s*>/gi,'**').replace(/<\s*br\s*\/?\s*>/gi,'\n').replace(/<\/?[a-zA-Z][^>]*>/g,''); }
+function mdToHtml(t){ let s=String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); s=s.replace(/\*\*([\s\S]+?)\*\*/g,'<b>$1</b>'); return s.replace(/\r?\n/g,'<br>'); }
+function ceToMd(root){
+  // Convierte lo escrito en el editor a texto simple: una línea por renglón y **negrita** por tramo
+  const lines=[]; let cur=[];
+  const isB=el=>/^(B|STRONG)$/.test(el.tagName)||/^(bold|[6-9]00)$/.test((el.style&&el.style.fontWeight)||'');
+  const push=(t,b)=>{ if(!t) return; const l=cur[cur.length-1]; if(l&&l.b===b) l.t+=t; else cur.push({t,b}); };
+  const nl=()=>{ lines.push(cur); cur=[]; };
+  (function walk(n,b){
+    const kids=[...n.childNodes];
+    kids.forEach((c,i)=>{
+      if(c.nodeType===3){ push(c.textContent.replace(/\u00a0/g,' '),b); return; }
+      if(c.nodeType!==1) return;
+      if(c.tagName==='BR'){ if(i<kids.length-1) nl(); return; }
+      if(/^(DIV|P)$/.test(c.tagName)){ if(cur.length) nl(); walk(c,b); nl(); return; }
+      walk(c,b||isB(c));
+    });
+  })(root,false);
+  if(cur.length) nl();
+  while(lines.length&&lines[lines.length-1].length===0) lines.pop();
+  return lines.map(runs=>runs.map(r=>{ if(!r.b) return r.t; const m=r.t.match(/^(\s*)([\s\S]*?)(\s*)$/); return m[2]?m[1]+'**'+m[2]+'**'+m[3]:r.t; }).join('')).join('\n');
+}
+function buildRich(host,get,set){
+  host.innerHTML='<div class="rtb"><button type="button" class="rb" title="Negrita (Ctrl+B)"><b>B</b></button><span class="small">Selecciona texto y pulsa B para negrita. Enter = nueva línea.</span></div><div class="rte" contenteditable="true"></div>';
+  const ed=host.querySelector('.rte'), btn=host.querySelector('.rb');
+  ed.innerHTML=mdToHtml(get());
+  const sync=()=>{ set(ceToMd(ed)); save(); };
+  btn.onmousedown=e=>{ e.preventDefault(); ed.focus(); document.execCommand('bold'); sync(); };
+  ed.oninput=sync;
+  ed.onpaste=e=>{ e.preventDefault(); const t=(e.clipboardData||window.clipboardData).getData('text/plain'); document.execCommand('insertText',false,t); };
+  richSet.add({ed,btn});
+}
+function richBind(id,obj,key){ const h=document.getElementById(id); if(h) buildRich(h,()=>obj[key]||'',v=>{obj[key]=v;}); }
+function richScan(root){ root.querySelectorAll('.rich-host[data-path]').forEach(h=>{ const [k,i,f]=h.dataset.path.split('.'); const o=data[k]&&data[k][i]; if(o) buildRich(h,()=>o[f]||'',v=>{o[f]=v;}); }); }
+function renderRichAll(){
+  richBind('hero-desc',data.hero,'descripcion'); richBind('nos-desc',data.nosotros,'descripcion'); richBind('cont-desc',data.contacto,'descripcion');
+  richBind('foot-desc',data.footer,'descripcion'); richBind('foot-hor',data.footer,'horario'); richBind('ubi-texto',data.ubicacion,'texto');
+  richScan(document);
+}
+function migrarTextos(){
+  const m=(o,k)=>{ if(o&&typeof o[k]==='string') o[k]=legacyMd(o[k]); };
+  m(data.hero,'descripcion'); m(data.nosotros,'descripcion'); m(data.contacto,'descripcion'); m(data.footer,'descripcion'); m(data.footer,'horario'); m(data.ubicacion,'texto');
+  (data.servicios||[]).forEach(x=>m(x,'descripcion')); (data.secciones||[]).forEach(x=>m(x,'texto'));
+}
+function renderLogoAdmin(){ const im=document.getElementById('logo-preview'); if(im) im.src=imgSrc(data.config.logo||'assets/img/logo.png'); }
+async function handleLogo(input){
+  const file=input.files[0]; if(!file||!validarArchivo(file,input)) return;
+  toast('Procesando logo...');
+  try{ const url=await prepararImagen(file,800,2.8*1024*1024,{png:true}); data.config.logo=await guardarImagen(url,'logo'); renderAll(); save(); toast('✅ Logo listo. Pulsa Publicar para aplicarlo en la web.'); }catch(e){ toast('❌ '+e.message); }
+}
+function restaurarLogo(){ if(confirm('¿Volver al logo original?')){ delete data.config.logo; renderAll(); save(); } }
+function addServicio(){ data.servicios.push({icono:"💧",titulo:"Nuevo producto",descripcion:"Descripción",activo:true}); renderAll(); save(); }
 function addTrust(){ data.trust.push({numero:"+",texto:"nuevo"}); renderAll(); save(); }
 function addValor(){ data.nosotros.valores.push({titulo:"Nuevo valor",descripcion:"Desc"}); renderAll(); save(); }
 function addChat(){ data.contacto.chat.push({texto:"Hola!",tipo:"bot"}); renderAll(); save(); }
@@ -266,7 +642,7 @@ document.getElementById('fileInput').addEventListener('change', e=>{
   };
   reader.readAsText(file);
 });
-init();
+boot();
 </script>
 </body>
 </html>
