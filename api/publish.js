@@ -82,6 +82,11 @@ module.exports = async (req, res) => {
       if (d.whatsapp !== undefined) d.whatsapp = String(d.whatsapp).replace(/\D/g, '').slice(0, 15);
       if (d.whatsappMensaje !== undefined) d.whatsappMensaje = String(d.whatsappMensaje).slice(0, 300);
       const cur = await getFile('data.json');
+      // El interruptor del módulo Juegos lo gestiona solo portal_juegos.html: siempre se conserva el valor guardado en el servidor.
+      try {
+        const prev = cur && cur.text ? JSON.parse(cur.text) : null;
+        if (prev && prev.juegos !== undefined) d.juegos = prev.juegos; else delete d.juegos;
+      } catch (e) { /* si data.json actual no se puede leer, se respeta lo recibido */ }
       await putFile('data.json', JSON.stringify(d, null, 2), cur && cur.sha, 'Actualizar contenido desde el portal admin');
       // SEO: las etiquetas del <head> deben estar en el HTML (Google y WhatsApp no ejecutan JavaScript)
       let seo = null;
