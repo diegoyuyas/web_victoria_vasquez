@@ -63,7 +63,14 @@ async function ghGet(path) {
   if (r.status === 404) return null;
   if (!r.ok) throw new Error('GitHub ' + r.status + ' (revisa GITHUB_TOKEN/GITHUB_REPO)');
   const j = await r.json();
-  return { sha: j.sha, text: j.content ? Buffer.from(j.content, 'base64').toString('utf8') : '' };
+  if (j.content) return { sha: j.sha, text: Buffer.from(j.content, 'base64').toString('utf8') };
+  // Archivos de más de 1 MB (p. ej. un data.json con fotos): la API no devuelve el contenido; se pide en formato raw.
+  if (j.size > 0) {
+    const rr = await fetch(`https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}`, { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.raw+json', 'User-Agent': 'web-admin' } });
+    if (!rr.ok) throw new Error('GitHub ' + rr.status + ' (no se pudo leer ' + path + ')');
+    return { sha: j.sha, text: await rr.text() };
+  }
+  return { sha: j.sha, text: '' };
 }
 async function ghPut(path, text, sha, message) {
   const { repo, token, branch } = ghConf();

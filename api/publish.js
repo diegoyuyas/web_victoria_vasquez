@@ -37,7 +37,15 @@ async function limpiarSubidas(d) {
 async function getFile(p) {
   const r = await gh(p); if (r.status === 404) return null;
   if (!r.ok) throw new Error('GitHub ' + r.status + ' (revisa GITHUB_TOKEN/GITHUB_REPO)');
-  const j = await r.json(); return { sha: j.sha, text: j.content ? Buffer.from(j.content, 'base64').toString('utf8') : '' };
+  const j = await r.json();
+  if (j.content) return { sha: j.sha, text: Buffer.from(j.content, 'base64').toString('utf8') };
+  // Archivos de más de 1 MB: la API no devuelve el contenido; se pide en formato raw.
+  if (j.size > 0) {
+    const rr = await fetch(`https://api.github.com/repos/${repo}/contents/${p}?ref=${branch}`, { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github.raw+json', 'User-Agent': 'web-admin' } });
+    if (!rr.ok) throw new Error('GitHub ' + rr.status + ' (no se pudo leer ' + p + ')');
+    return { sha: j.sha, text: await rr.text() };
+  }
+  return { sha: j.sha, text: '' };
 }
 async function putFile(p, text, sha, message) {
   const r = await gh(p, { method: 'PUT', body: JSON.stringify({ message, content: Buffer.from(text).toString('base64'), branch, sha: sha || undefined }) });
