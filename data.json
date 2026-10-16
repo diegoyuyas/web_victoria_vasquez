@@ -84,7 +84,11 @@
       "icono": "🦷🐾",
       "titulo": "Profilaxis Dental",
       "descripcion": "Limpieza dental y cuidado bucal.",
-      "activo": true
+      "activo": true,
+      "imagen": "assets/uploads/producto-1792116820012.jpg",
+      "posY": 51,
+      "posX": 56,
+      "zoom": 1
     },
     {
       "icono": "🩹🐾",
