@@ -54,7 +54,10 @@
       "icono": "🪱🐾",
       "titulo": "Desparasitación",
       "descripcion": "Interna: Pastillas\nExternas: Pipetas",
-      "activo": true
+      "activo": true,
+      "imagen": "assets/uploads/producto-1792118061616.jpg",
+      "posX": 61,
+      "posY": 90
     },
     {
       "icono": "🐕✂️🐈",
@@ -94,7 +97,8 @@
       "icono": "🩹🐾",
       "titulo": "Cirugías Menores",
       "descripcion": "Heridas y suturas con seguimiento.",
-      "activo": true
+      "activo": true,
+      "imagen": "assets/uploads/producto-1792118017992.jpg"
     },
     {
       "icono": "👁️🐾",
