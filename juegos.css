@@ -1,0 +1,64 @@
+/* Módulo Juegos · Ruleta de la Suerte — estilos públicos.
+   Solo usa las variables de color del sitio (con valores de respaldo neutros) y clases con prefijo jg-. */
+.jg-section,.jg-modal{--jg-p:var(--teal,#2563eb);--jg-on:var(--on-teal,#fff);--jg-t:var(--charcoal,#1f2937);--jg-bg:var(--cream,#f8fafc);--jg-soft:var(--cream2,#eef2ff);--jg-line:var(--line,#dbe3f0)}
+.jg-section{padding:56px 0}
+.jg-wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.jg-head{max-width:640px;margin:0 0 26px}
+.jg-eyebrow{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--jg-p);margin-bottom:6px}
+.jg-head h2{margin:0 0 10px}
+.jg-lead{margin:0;opacity:.8}
+.jg-card{display:grid;grid-template-columns:260px 1fr;gap:28px;align-items:center;background:#fff;border:1px solid var(--jg-line);border-radius:24px;padding:26px;box-shadow:0 10px 30px rgba(0,0,0,.05)}
+.jg-card-wheel{width:100%;max-width:260px;margin:0 auto;animation:jgLento 26s linear infinite}
+.jg-card-wheel svg{display:block;width:100%;height:auto}
+.jg-card-body h3{margin:0 0 8px;font-size:22px}
+.jg-card-body p{margin:0 0 18px;opacity:.8}
+.jg-btn{display:inline-block;border:0;border-radius:999px;padding:13px 28px;font:inherit;font-weight:700;cursor:pointer;background:var(--jg-p);color:var(--jg-on);box-shadow:0 8px 20px rgba(0,0,0,.15);transition:transform .15s,filter .15s}
+.jg-btn:hover{transform:translateY(-1px);filter:brightness(.95)}
+.jg-btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.jg-btn.sec{background:#fff;color:var(--jg-t);border:1px solid var(--jg-line);box-shadow:none}
+.jg-btn.wa{background:#25D366;color:#fff;text-decoration:none}
+@keyframes jgLento{to{transform:rotate(360deg)}}
+
+/* Ventana */
+.jg-modal{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;padding:14px}
+.jg-modal[hidden]{display:none}
+.jg-backdrop{position:absolute;inset:0;background:rgba(15,23,42,.6)}
+.jg-dialog{position:relative;width:100%;max-width:460px;max-height:96vh;overflow-y:auto;background:#fff;color:var(--jg-t);border-radius:24px;padding:22px 20px 20px;box-shadow:0 24px 60px rgba(0,0,0,.35);-webkit-overflow-scrolling:touch}
+.jg-close{position:absolute;top:10px;right:12px;width:38px;height:38px;border:0;border-radius:50%;background:var(--jg-soft);color:var(--jg-t);font-size:24px;line-height:1;cursor:pointer}
+.jg-dialog h3{margin:0 40px 4px 0;font-size:21px;line-height:1.2}
+.jg-texto{margin:0 0 6px;font-size:14px;opacity:.75;white-space:pre-line}
+.jg-wheelbox{position:relative;width:min(300px,78vw);margin:14px auto 12px}
+.jg-pointer{position:absolute;left:50%;top:-6px;transform:translateX(-50%);width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:24px solid var(--jg-t);filter:drop-shadow(0 2px 2px rgba(0,0,0,.3));z-index:2}
+.jg-wheel{width:100%;border-radius:50%;box-shadow:0 8px 24px rgba(0,0,0,.2);will-change:transform}
+.jg-wheel svg{display:block;width:100%;height:auto}
+.jg-wheelbox.off{opacity:.35;filter:grayscale(.6)}
+.jg-panel{font-size:15px}
+.jg-panel label{display:block;font-size:13px;font-weight:700;margin:12px 0 4px}
+.jg-panel input[type=text],.jg-panel input[type=tel],.jg-panel input:not([type]){width:100%;padding:12px 13px;border:1px solid var(--jg-line);border-radius:12px;font:inherit;background:#fff;color:inherit}
+.jg-panel input:focus{outline:2px solid var(--jg-p);border-color:var(--jg-p)}
+.jg-panel input.cod{text-transform:uppercase;letter-spacing:.08em;text-align:center;font-weight:700}
+.jg-panel .chk{display:flex;gap:10px;align-items:flex-start;font-weight:500;font-size:13px;line-height:1.4;margin:14px 0 4px}
+.jg-panel .chk input{margin-top:3px;flex:0 0 auto}
+.jg-err{color:#b91c1c;font-size:14px;font-weight:600;min-height:20px;margin:8px 0 0}
+.jg-acciones{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.jg-acciones .jg-btn{flex:1 1 auto;text-align:center}
+.jg-res{text-align:center;padding:6px 0 2px}
+.jg-res .grande{font-size:26px;font-weight:800;line-height:1.2;margin:0 0 6px}
+.jg-res .premio{display:inline-block;background:var(--jg-soft);border:1px solid var(--jg-line);border-radius:14px;padding:8px 16px;font-weight:800;font-size:18px;margin:6px 0 10px}
+.jg-res p{margin:6px 0;font-size:14px}
+.jg-res .ticket{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;opacity:.8}
+.jg-res.gana .grande{animation:jgPulso .9s ease-in-out 3}
+@keyframes jgPulso{50%{transform:scale(1.07)}}
+.jg-nota{font-size:12px;opacity:.65;margin-top:10px}
+body.jg-lock{overflow:hidden}
+
+@media(max-width:720px){
+  .jg-section{padding:44px 0}
+  .jg-card{grid-template-columns:1fr;gap:18px;padding:20px;text-align:center}
+  .jg-card-wheel{max-width:200px}
+}
+@media(prefers-reduced-motion:reduce){
+  .jg-card-wheel{animation:none}
+  .jg-btn{transition:none}
+  .jg-res.gana .grande{animation:none}
+}

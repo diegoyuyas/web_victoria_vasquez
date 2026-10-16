@@ -105,6 +105,14 @@
   }
   try{ const cached = localStorage.getItem('bz_logo'); if(cached){ LOGO = cached; applyLogo(cached); } }catch(e){}
 
+  // ---- Módulo Juegos (opcional): solo se carga si data.juegos.activo es verdadero ----
+  function cargarJuegos(data){
+    if(!(data.juegos && data.juegos.activo) || window.__JG__) return;
+    window.__JG__ = { data: data };
+    const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'juegos.css'; document.head.appendChild(l);
+    const sc = document.createElement('script'); sc.src = 'juegos.js'; sc.defer = true; document.body.appendChild(sc);
+  }
+
   // ---- Carrusel opcional ----
   function applyCarrusel(data){
     const on = !(data.config && data.config.carruselActivo === false);
@@ -175,6 +183,7 @@
       renderFromData(data);
       renderUbicacion(data);
       renderSecciones(data);
+      cargarJuegos(data);
       initFondo(data);
       initCarrusel(data);
     }catch(e){

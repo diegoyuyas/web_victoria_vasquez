@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Juegos · Administración</title>
+<style>
+:root{--teal:#2563eb;--teal2:#1d4ed8;--on-teal:#fff;--charcoal:#1f2937;--cream:#f8fafc;--cream2:#eef2ff;--line:#dbe3f0;--ok:#15803d;--warn:#b45309;--bad:#b91c1c}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--cream);color:var(--charcoal);line-height:1.45;font-size:15px}
+h1,h2,h3,h4{margin:0 0 8px;line-height:1.25}
+h2{font-size:20px}h3{font-size:17px}h4{font-size:15px}
+p{margin:0 0 10px}
+.small{font-size:13px;opacity:.75}
+a{color:var(--teal2)}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select,textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;min-width:0}
+input[type=checkbox]{width:auto}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--teal);outline-offset:0;border-color:var(--teal)}
+textarea{min-height:70px;resize:vertical}
+label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px}
+label.inline{display:flex;gap:8px;align-items:center;font-weight:500;font-size:14px;margin:8px 0}
+.btn{border:0;border-radius:999px;padding:9px 18px;font-weight:600;cursor:pointer;background:var(--teal);color:var(--on-teal)}
+.btn:hover{background:var(--teal2)}
+.btn.ghost{background:#fff;color:var(--charcoal);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--cream2)}
+.btn.bad{background:#fff;color:var(--bad);border:1px solid var(--bad)}
+.btn.sm{padding:5px 12px;font-size:13px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.right{margin-left:auto}
+header.top{background:#fff;border-bottom:1px solid var(--line);padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header.top img{width:40px;height:40px;object-fit:contain;border-radius:8px}
+header.top .tt{font-weight:700}
+main{max-width:1050px;margin:0 auto;padding:16px}
+.tabs{display:flex;gap:6px;margin:6px 0 14px;overflow-x:auto;padding-bottom:2px}
+.tab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:600;white-space:nowrap}
+.tab.on{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--cream2);border:1px solid var(--line)}
+.badge.disponible{background:#dcfce7;color:#166534;border-color:#bbf7d0}
+.badge.usado{background:#e5e7eb;color:#374151}
+.badge.vencido{background:#fef3c7;color:#92400e;border-color:#fde68a}
+.badge.anulado{background:#fee2e2;color:#991b1b;border-color:#fecaca}
+.badge.premio{background:#fef9c3;color:#854d0e;border-color:#fde68a}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.stat b{display:block;font-size:24px}
+.check{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}
+.check span.ok{color:var(--ok);font-weight:600}
+.check span.no{opacity:.7}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle;white-space:nowrap}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;opacity:.7}
+td.wrap{white-space:normal}
+.sector{display:grid;grid-template-columns:34px 64px 1fr 176px 120px 84px auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.sector.off{opacity:.55}
+.sector .n{font-weight:700;opacity:.6;text-align:center}
+.sum{font-weight:700;padding:6px 14px;border-radius:999px;display:inline-block}
+.sum.ok{background:#dcfce7;color:#166534}
+.sum.bad{background:#fee2e2;color:#991b1b}
+.codes-box{background:var(--cream2);border:1px solid var(--line);border-radius:12px;padding:10px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;max-height:220px;overflow:auto}
+.bar{height:10px;border-radius:999px;background:var(--cream2);overflow:hidden;min-width:120px}
+.bar i{display:block;height:100%;background:var(--teal)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--charcoal);color:#fff;padding:10px 18px;border-radius:12px;z-index:50;max-width:92vw;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.toast.err{background:var(--bad)}
+.login{max-width:360px;margin:12vh auto;padding:0 16px}
+.hidden{display:none!important}
+.pad30{margin-top:30px}
+.dirty{color:var(--warn);font-weight:700}
+.ficha{background:var(--cream2);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}
+.ficha dl{display:grid;grid-template-columns:130px 1fr;gap:4px 10px;margin:0}
+.ficha dt{font-weight:600;opacity:.75}.ficha dd{margin:0;word-break:break-word}
+@media(max-width:720px){
+  .grid2,.grid3{grid-template-columns:1fr}
+  .pad30{margin-top:0}
+  .stats{grid-template-columns:1fr 1fr 1fr;gap:8px}.stat b{font-size:20px}
+  .sector{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+  .sector .n{flex:0 0 28px}.sector .e{flex:0 0 56px}.sector .nm{flex:1 1 120px}.sector .t{flex:1 1 100%}
+  .sector .p{flex:0 0 130px}.sector .a{flex:0 0 auto}.sector .x{margin-left:auto}
+  table.rt thead{display:none}
+  table.rt,table.rt tbody,table.rt tr,table.rt td{display:block;width:100%}
+  table.rt tr{border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:10px;background:#fff}
+  table.rt td{border:0;padding:3px 0;white-space:normal;display:flex;gap:8px;justify-content:space-between;align-items:center;text-align:right}
+  table.rt td::before{content:attr(data-l);font-size:12px;text-transform:uppercase;opacity:.6;flex:0 0 84px;text-align:left}
+  table.rt td[colspan]::before{content:none}
+  main{padding:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Inicio de sesión ===== -->
+<section id="login" class="login">
+  <div class="card">
+    <h2>Juegos · Administración</h2>
+    <p class="small">Ingresa con la misma contraseña de tu portal de administración.</p>
+    <label for="pw">Contraseña</label>
+    <input id="pw" type="password" autocomplete="current-password">
+    <p id="loginError" class="small" style="color:var(--bad);min-height:18px;margin:8px 0 0"></p>
+    <button id="loginBtn" class="btn" style="width:100%;margin-top:6px">Entrar</button>
+  </div>
+</section>
+
+<!-- ===== Aplicación ===== -->
+<div id="app" class="hidden">
+  <header class="top">
+    <img id="logo" alt="" src="assets/img/logo.png">
+    <div><div class="tt" id="tituloPagina">Juegos · Ruleta de la Suerte</div><div class="small" id="nombreNegocio"></div></div>
+    <div class="row right">
+      <a class="btn ghost sm" href="portal_admin.html" style="text-decoration:none">← Portal de administración</a>
+      <button class="btn ghost sm" id="salir">Cerrar sesión</button>
+    </div>
+  </header>
+  <main>
+    <div class="card" id="estado"></div>
+    <div class="stats" id="stats"></div>
+    <nav class="tabs" id="tabs">
+      <button class="tab on" data-tab="sectores">Sectores</button>
+      <button class="tab" data-tab="codigos">Códigos</button>
+      <button class="tab" data-tab="ganadores">Ganadores</button>
+      <button class="tab" data-tab="probar">Probar</button>
+    </nav>
+    <section id="p-sectores"></section>
+    <section id="p-codigos" class="hidden"></section>
+    <section id="p-ganadores" class="hidden"></section>
+    <section id="p-probar" class="hidden"></section>
+  </main>
+</div>
+<div id="toast" class="toast hidden"></div>
+
+<script>
+(function(){
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = v => String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+let PW = '', cfg = null, cfgSrv = null, site = {}, resumen = {}, visible = false;
+let cod = { pagina: 1, total: 0, items: [], nuevos: [], nota: '' };
+let gan = { estado: 'todos', items: [], total: 0, truncado: false, ficha: null };
+let probar = null;
+
+// ---------- utilidades ----------
+let tt;
+function toast(msg, err){ const t = $('#toast'); t.textContent = msg; t.className = 'toast' + (err ? ' err' : ''); clearTimeout(tt); tt = setTimeout(() => t.classList.add('hidden'), err ? 6000 : 3000); }
+const fecha = ms => ms ? new Date(ms).toLocaleString('es-PE', { dateStyle: 'short', timeStyle: 'short' }) : '—';
+const fechaCorta = ms => ms ? new Date(ms).toLocaleDateString('es-PE') : '—';
+const pctTxt = bp => (bp / 100).toFixed(2);
+function copiar(texto){
+  const ok = () => toast('Copiado');
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(texto).then(ok, () => fallback());
+  else fallback();
+  function fallback(){ const a = document.createElement('textarea'); a.value = texto; a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); ok(); } catch (e) { toast('No se pudo copiar', true); } a.remove(); }
+}
+function descargar(nombre, texto){
+  const blob = new Blob(['\ufeff' + texto], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nombre; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+}
+async function api(action, extra){
+  let r;
+  try { r = await fetch('api/ruleta', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.assign({ action, user: 'admin', password: PW }, extra || {})) }); }
+  catch (e) { const er = new Error('No se pudo conectar con el servidor.'); er.status = 0; throw er; }
+  let j; try { j = await r.json(); } catch (e) { const er = new Error('Respuesta inválida del servidor (¿está instalado el módulo de juegos?).'); er.status = r.status; throw er; }
+  if (!j.ok) { const er = new Error(j.error || 'Error'); er.status = r.status; throw er; }
+  return j;
+}
+async function seguro(fn){ try { return await fn(); } catch (e) { if (e.status === 401) { cerrarSesion(); $('#loginError').textContent = 'La sesión caducó. Vuelve a ingresar.'; } else toast(e.message, true); } }
+
+// ---------- tema (toma los colores del sitio, si existen) ----------
+const hexOk = h => /^#[0-9a-fA-F]{6}$/.test(h || '');
+const h2r = h => [1,3,5].map(i => parseInt(h.substr(i,2),16));
+const r2h = r => '#' + r.map(v => Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('');
+const mix = (a,b,t) => { const x = h2r(a), y = h2r(b); return r2h(x.map((v,i) => v + (y[i]-v)*t)); };
+const lum = h => { const c = h2r(h).map(v => { v /= 255; return v <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055,2.4); }); return .2126*c[0]+.7152*c[1]+.0722*c[2]; };
+function aplicarTema(c){
+  if (!c || !hexOk(c.principal)) return;
+  const p = c.principal, t = hexOk(c.texto) ? c.texto : '#1f2937', f = hexOk(c.fondo) ? c.fondo : '#f8fafc', st = document.documentElement.style;
+  st.setProperty('--teal', p); st.setProperty('--teal2', mix(p,'#000000',.15)); st.setProperty('--on-teal', (1.05/(lum(p)+.05)) >= 3 ? '#ffffff' : '#111111');
+  st.setProperty('--charcoal', t); st.setProperty('--cream', f); st.setProperty('--cream2', mix(f,p,.12)); st.setProperty('--line', mix(f,p,.2));
+}
+
+// ---------- inicio de sesión ----------
+async function entrar(){
+  PW = $('#pw').value; $('#loginError').textContent = '';
+  if (!PW) { $('#loginError').textContent = 'Escribe tu contraseña.'; return; }
+  $('#loginBtn').disabled = true;
+  try { await api('admin_login'); await iniciar(); $('#login').classList.add('hidden'); $('#app').classList.remove('hidden'); }
+  catch (e) { $('#loginError').textContent = e.status === 401 ? 'Contraseña incorrecta.' : e.message; PW = ''; }
+  $('#loginBtn').disabled = false;
+}
+function cerrarSesion(){ PW = ''; $('#pw').value = ''; $('#app').classList.add('hidden'); $('#login').classList.remove('hidden'); }
+
+async function iniciar(){
+  try {
+    const d = await (await fetch('data.json?t=' + Date.now())).json();
+    site = d || {}; visible = !!(d.juegos && d.juegos.activo);
+    aplicarTema(d.config && d.config.colores);
+    const logo = (d.config && d.config.logo) || 'assets/img/logo.png';
+    const im = $('#logo'); im.onerror = () => { im.style.display = 'none'; }; im.src = logo;
+    const n = d.sitio && d.sitio.nombre; $('#nombreNegocio').textContent = n || '';
+    document.title = 'Juegos · ' + (n || 'Administración');
+  } catch (e) { /* el sitio puede no tener data.json: se usan valores neutros */ }
+  const c = await api('admin_config_get');
+  cfg = JSON.parse(JSON.stringify(c.config)); cfgSrv = JSON.parse(JSON.stringify(c.config)); cfg._guardada = cfgSrv._guardada = c.guardada;
+  await cargarResumen();
+  renderTodo();
+  cargarCodigos();
+}
+async function cargarResumen(){ try { resumen = await api('admin_resumen'); } catch (e) { resumen = {}; } }
+
+// ---------- estado general ----------
+function renderEstado(){
+  const guardada = cfgSrv._guardada, activa = cfgSrv.activo;
+  const pasos = [
+    [guardada, '1. Sectores guardados'],
+    [activa, '2. Ruleta activa'],
+    [visible, '3. Sección visible en la web'],
+    [(resumen.codigos || 0) > 0, '4. Códigos generados'],
+  ];
+  $('#estado').innerHTML = `
+    <div class="row" style="margin-bottom:8px"><h3 style="margin:0">Estado del juego</h3></div>
+    <div class="check" style="margin-bottom:12px">${pasos.map(p => `<span class="${p[0] ? 'ok' : 'no'}">${p[0] ? '✓' : '○'} ${p[1]}</span>`).join('')}</div>
+    <div class="row">
+      <label class="inline" style="margin:0"><input type="checkbox" id="swActiva" ${activa ? 'checked' : ''} ${guardada ? '' : 'disabled'}> Ruleta activa (se puede jugar)</label>
+      <label class="inline" style="margin:0"><input type="checkbox" id="swVisible" ${visible ? 'checked' : ''}> Mostrar la sección "Juegos" en la web</label>
+    </div>
+    ${guardada ? '' : '<p class="small" style="margin:8px 0 0">Aún no has guardado la ruleta: abajo se muestra una configuración de ejemplo. Edítala y pulsa "Guardar ruleta".</p>'}
+    <p class="small" style="margin:8px 0 0">Mostrar u ocultar la sección en la web se publica en tu sitio y tarda 1-2 minutos. Pausar la ruleta es inmediato.</p>`;
+  $('#stats').innerHTML = `<div class="stat"><b>${resumen.codigos || 0}</b><span class="small">Códigos generados</span></div><div class="stat"><b>${resumen.jugadas || 0}</b><span class="small">Jugadas</span></div><div class="stat"><b>${resumen.premios || 0}</b><span class="small">Premios ganados</span></div>`;
+}
+
+// ---------- pestaña Sectores ----------
+const dirty = () => JSON.stringify(strip(cfg)) !== JSON.stringify(strip(cfgSrv));
+const strip = c => { const o = JSON.parse(JSON.stringify(c)); delete o._guardada; return o; };
+const suma = () => cfg.sectores.filter(s => s.activo).reduce((a, s) => a + (Number(s.pct) || 0), 0);
+
+function renderSectores(){
+  const s = suma(), okSuma = s === 10000, n = cfg.sectores.length;
+  const filas = cfg.sectores.map((x, i) => `
+    <div class="sector ${x.activo ? '' : 'off'}">
+      <div class="n">${i + 1}</div>
+      <input class="e" data-i="${i}" data-f="emoji" value="${esc(x.emoji)}" maxlength="8" placeholder="🙂" aria-label="Emoji del sector ${i + 1}">
+      <input class="nm" data-i="${i}" data-f="nombre" value="${esc(x.nombre)}" maxlength="40" placeholder="Nombre del sector" aria-label="Nombre del sector ${i + 1}">
+      <select class="t" data-i="${i}" data-f="tipo" aria-label="Tipo del sector ${i + 1}"><option value="premio" ${x.tipo === 'premio' ? 'selected' : ''}>🎁 Premio</option><option value="nada" ${x.tipo === 'nada' ? 'selected' : ''}>Sigue intentando</option></select>
+      <div class="p row" style="flex-wrap:nowrap;gap:4px"><input type="number" min="0" max="100" step="0.01" data-i="${i}" data-f="pct" value="${pctTxt(x.pct)}" aria-label="Probabilidad del sector ${i + 1}" style="text-align:right"><span>%</span></div>
+      <label class="inline a" style="margin:0"><input type="checkbox" data-i="${i}" data-f="activo" ${x.activo ? 'checked' : ''}> Activo</label>
+      <div class="row x" style="gap:4px;flex-wrap:nowrap">
+        <button class="btn ghost sm" data-act="subir" data-i="${i}" ${i === 0 ? 'disabled' : ''} aria-label="Subir">↑</button>
+        <button class="btn ghost sm" data-act="bajar" data-i="${i}" ${i === n - 1 ? 'disabled' : ''} aria-label="Bajar">↓</button>
+        <button class="btn bad sm" data-act="quitar" data-i="${i}" ${n <= 6 ? 'disabled' : ''} aria-label="Quitar">✕</button>
+      </div>
+    </div>`).join('');
+  $('#p-sectores').innerHTML = `
+    <div class="card">
+      <h3>Textos y reglas</h3>
+      <div class="grid2">
+        <div><label for="cTitulo">Título del juego</label><input id="cTitulo" maxlength="60" value="${esc(cfg.titulo)}"></div>
+        <div><label class="inline pad30"><input type="checkbox" id="cProb" ${cfg.mostrarProbabilidades ? 'checked' : ''}> Mostrar las probabilidades a los clientes</label></div>
+      </div>
+      <label for="cTexto">Texto de presentación (opcional)</label>
+      <textarea id="cTexto" maxlength="400">${esc(cfg.texto)}</textarea>
+      <div class="grid3">
+        <div><label for="cVenc">Los códigos vencen a los (días)</label><input id="cVenc" type="number" min="1" max="365" value="${cfg.vencimientoDias}"></div>
+        <div><label for="cRet">Conservar datos del ganador tras entregar (días)</label><input id="cRet" type="number" min="1" max="365" value="${cfg.retencionDias}"></div>
+        <div><label for="cRetMax">Si nunca se entrega, borrar a los (días)</label><input id="cRetMax" type="number" min="1" max="730" value="${cfg.retencionMaxDias}"></div>
+      </div>
+      <p class="small" style="margin-top:8px">Quien no gana nunca deja sus datos guardados. Los de quien gana se conservan solo el tiempo indicado.</p>
+    </div>
+    <div class="card">
+      <div class="row" style="margin-bottom:6px"><h3 style="margin:0">Sectores de la ruleta (${n})</h3>
+        <span class="sum ${okSuma ? 'ok' : 'bad'} right" id="sumaTxt">Suma: ${pctTxt(s)} %${okSuma ? ' ✓' : ' (debe ser 100 %)'}</span></div>
+      <p class="small">Cada sector activo tiene una probabilidad; los sectores activos deben sumar exactamente 100 %. Un sector con 0 % se ve en la ruleta pero nunca sale.</p>
+      ${filas}
+      <div class="row" style="margin-top:12px">
+        <button class="btn ghost sm" data-act="agregar" ${n >= 20 ? 'disabled' : ''}>+ Añadir sector</button>
+        <button class="btn ghost sm" data-act="repartir">Repartir lo que falta entre los "Sigue intentando"</button>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn" id="guardar">Guardar ruleta</button>
+      <button class="btn ghost" id="descartar" ${dirty() ? '' : 'disabled'}>Descartar cambios</button>
+      <span id="sucio" class="dirty ${dirty() ? '' : 'hidden'}">● Cambios sin guardar</span>
+    </div>`;
+}
+function actualizarSuma(){
+  const s = suma(), okSuma = s === 10000, el = $('#sumaTxt');
+  if (el) { el.className = 'sum ' + (okSuma ? 'ok' : 'bad') + ' right'; el.textContent = 'Suma: ' + pctTxt(s) + ' %' + (okSuma ? ' ✓' : ' (debe ser 100 %)'); }
+  const sc = $('#sucio'); if (sc) sc.classList.toggle('hidden', !dirty());
+  const d = $('#descartar'); if (d) d.disabled = !dirty();
+}
+function nuevoId(){ let k = cfg.sectores.length + 1; const ids = new Set(cfg.sectores.map(s => s.id)); while (ids.has('s' + k)) k++; return 's' + k; }
+function repartir(){
+  const act = cfg.sectores.filter(s => s.activo), premios = act.filter(s => s.tipo === 'premio').reduce((a, s) => a + (Number(s.pct) || 0), 0), nadas = act.filter(s => s.tipo === 'nada');
+  if (!nadas.length) return toast('No hay sectores "Sigue intentando" activos para repartir.', true);
+  const resto = 10000 - premios; if (resto < 0) return toast('Los premios ya superan el 100 %. Baja alguna probabilidad.', true);
+  const base = Math.floor(resto / nadas.length); let extra = resto - base * nadas.length;
+  nadas.forEach(s => { s.pct = base + (extra > 0 ? 1 : 0); if (extra > 0) extra--; });
+  renderSectores();
+}
+function leerAjustes(){
+  cfg.titulo = $('#cTitulo').value; cfg.texto = $('#cTexto').value; cfg.mostrarProbabilidades = $('#cProb').checked;
+  cfg.vencimientoDias = Number($('#cVenc').value); cfg.retencionDias = Number($('#cRet').value); cfg.retencionMaxDias = Number($('#cRetMax').value);
+}
+async function guardarConfig(c, aviso){
+  const r = await seguro(() => api('admin_config_set', { config: strip(c) }));
+  if (!r) return false;
+  cfgSrv = JSON.parse(JSON.stringify(r.config)); cfgSrv._guardada = true;
+  if (c === cfg) cfg = JSON.parse(JSON.stringify(cfgSrv)); else cfg.activo = cfgSrv.activo;
+  await cargarResumen(); renderTodo(); toast(aviso || 'Ruleta guardada'); return true;
+}
+
+// ---------- pestaña Códigos ----------
+function enlaceJuego(){ return location.origin + '/#juegos'; }
+function mensajeWa(codigo, vence){
+  return `¡Hola! Tienes un código para jugar a "${cfgSrv.titulo}": ${codigo}\nIngresa en ${enlaceJuego()} y gira la ruleta.${vence ? '\nVence el ' + fechaCorta(vence) + '.' : ''}`;
+}
+function renderCodigos(){
+  const nuevos = cod.nuevos.length ? `
+    <div class="card">
+      <div class="row"><h3 style="margin:0">Códigos generados (${cod.nuevos.length})</h3>
+        <button class="btn sm right" data-act="copiarTodos">Copiar todos</button>
+        <button class="btn ghost sm" data-act="cerrarNuevos">Cerrar</button></div>
+      <p class="small" style="margin-top:6px">Entrega cada código a un cliente. Cada código sirve para una sola jugada y vence el ${fechaCorta(cod.venceNuevos)}.</p>
+      <div class="codes-box">${cod.nuevos.map(c => `<div class="row" style="justify-content:space-between;padding:2px 0"><span>${esc(c)}</span><span class="row" style="gap:4px"><button class="btn ghost sm" data-act="copiar" data-c="${esc(c)}">Copiar</button><a class="btn ghost sm" style="text-decoration:none" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(mensajeWa(c, cod.venceNuevos))}">WhatsApp</a></span></div>`).join('')}</div>
+    </div>` : '';
+  const pags = Math.max(1, Math.ceil(cod.total / 50));
+  $('#p-codigos').innerHTML = `
+    <div class="card">
+      <h3>Generar códigos</h3>
+      <div class="grid3">
+        <div><label for="gCant">Cantidad (1 a 200)</label><input id="gCant" type="number" min="1" max="200" value="1"></div>
+        <div><label for="gNota">Nota (opcional: para quién es)</label><input id="gNota" maxlength="80" placeholder="Ej.: Cliente Juan"></div>
+        <div><label for="gVenc">Vence a los (días)</label><input id="gVenc" type="number" min="1" max="365" value="${cfgSrv.vencimientoDias}"></div>
+      </div>
+      <div class="row" style="margin-top:12px"><button class="btn" id="generar">Generar códigos</button></div>
+    </div>
+    ${nuevos}
+    <div class="card">
+      <div class="row" style="margin-bottom:8px"><h3 style="margin:0">Todos los códigos (${cod.total})</h3>
+        <button class="btn ghost sm right" data-act="recargarCodigos">Actualizar</button></div>
+      <div class="table-wrap"><table class="rt">
+        <thead><tr><th>Código</th><th>Estado</th><th>Nota</th><th>Creado</th><th>Vence</th><th>Resultado</th><th></th></tr></thead>
+        <tbody>${cod.items.length ? cod.items.map(x => `<tr>
+          <td data-l="Código"><b>${esc(x.codigo)}</b></td><td data-l="Estado"><span class="badge ${esc(x.estado)}">${esc(x.estado)}</span></td><td class="wrap" data-l="Nota">${esc(x.nota)}</td>
+          <td data-l="Creado">${fecha(x.creado)}</td><td data-l="Vence">${fechaCorta(x.vence)}</td>
+          <td data-l="Resultado">${x.jugada ? (x.jugada.esPremio ? '<span class="badge premio">🎁 ' + esc(x.jugada.sector) + '</span>' : esc(x.jugada.sector)) : '—'}</td>
+          <td data-l="Acciones"><div class="row" style="gap:4px;flex-wrap:nowrap"><button class="btn ghost sm" data-act="copiar" data-c="${esc(x.codigo)}">Copiar</button>${x.estado === 'disponible' ? `<button class="btn bad sm" data-act="anular" data-c="${esc(x.codigo)}">Anular</button>` : ''}</div></td></tr>`).join('') : '<tr><td colspan="7" class="small">Todavía no hay códigos.</td></tr>'}</tbody>
+      </table></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn ghost sm" data-act="pagAnt" ${cod.pagina <= 1 ? 'disabled' : ''}>← Anterior</button>
+        <span class="small">Página ${cod.pagina} de ${pags}</span>
+        <button class="btn ghost sm" data-act="pagSig" ${cod.pagina >= pags ? 'disabled' : ''}>Siguiente →</button>
+      </div>
+    </div>`;
+}
+async function cargarCodigos(){
+  const r = await seguro(() => api('admin_codigos_listar', { pagina: cod.pagina, tamano: 50 }));
+  if (r) { cod.items = r.items; cod.total = r.total; renderCodigos(); }
+}
+
+// ---------- pestaña Ganadores ----------
+function renderGanadores(){
+  const f = gan.ficha;
+  const ficha = f ? `
+    <div class="ficha"><dl>
+      <dt>Código</dt><dd><b>${esc(f.codigo)}</b> <span class="badge ${esc(f.estado)}">${esc(f.estado)}</span></dd>
+      <dt>Resultado</dt><dd>${f.jugada ? (f.jugada.esPremio ? '🎁 PREMIO: ' : '') + esc(f.jugada.sector) + ' · ' + fecha(f.jugada.ts) : 'Aún no se ha jugado'}</dd>
+      ${f.jugada && f.jugada.esPremio ? `<dt>Ganador</dt><dd>${f.datosEliminados ? '(datos eliminados)' : esc(f.nombres) + ' · DNI ' + esc(f.dni)}</dd>
+      <dt>Informó</dt><dd>${f.informado ? 'Sí · ' + fecha(f.informadoTs) : 'No'}</dd>
+      <dt>Entrega</dt><dd>${f.entregado ? 'Entregado · ' + fecha(f.entregadoTs) : 'Pendiente'}</dd>` : ''}
+    </dl></div>` : '';
+  $('#p-ganadores').innerHTML = `
+    <div class="card">
+      <h3>Verificar un código</h3>
+      <p class="small">Antes de entregar un premio, escribe el código que te muestra el cliente: aquí ves el resultado real.</p>
+      <div class="row"><input id="vCod" placeholder="RS-XXXX-XXXXXX" style="max-width:260px" autocapitalize="characters"><button class="btn" id="verificar">Verificar</button></div>
+      ${ficha}
+    </div>
+    <div class="card">
+      <div class="row" style="margin-bottom:8px"><h3 style="margin:0">Ganadores (${gan.items.length}${gan.truncado ? ' de ' + gan.total : ''})</h3>
+        <select id="gEstado" style="max-width:170px" class="right"><option value="todos" ${gan.estado === 'todos' ? 'selected' : ''}>Todos</option><option value="pendiente" ${gan.estado === 'pendiente' ? 'selected' : ''}>Pendientes de entrega</option><option value="entregado" ${gan.estado === 'entregado' ? 'selected' : ''}>Entregados</option></select>
+        <button class="btn ghost sm" data-act="recargarGan">Actualizar</button>
+        <button class="btn ghost sm" data-act="exportar">Exportar CSV</button></div>
+      <div class="table-wrap"><table class="rt">
+        <thead><tr><th>Fecha</th><th>Nombres</th><th>DNI</th><th>Código</th><th>Premio</th><th>Informó</th><th>Estado</th><th></th></tr></thead>
+        <tbody>${gan.items.length ? gan.items.map(x => `<tr>
+          <td data-l="Fecha">${fecha(x.jugada && x.jugada.ts)}</td>
+          <td class="wrap" data-l="Nombres">${x.datosEliminados ? '<span class="small">(datos eliminados)</span>' : esc(x.nombres)}</td><td data-l="DNI">${x.datosEliminados ? '—' : esc(x.dni)}</td>
+          <td data-l="Código"><b>${esc(x.codigo)}</b></td><td class="wrap" data-l="Premio">🎁 ${esc(x.jugada && x.jugada.sector)}</td>
+          <td data-l="Informó">${x.informado ? '✔' : '—'}</td>
+          <td data-l="Estado">${x.entregado ? '<span class="badge disponible">Entregado</span>' : '<span class="badge vencido">Pendiente</span>'}</td>
+          <td data-l="Acciones"><div class="row" style="gap:4px;flex-wrap:wrap;justify-content:flex-end">${x.entregado ? '' : `<button class="btn sm" data-act="entregar" data-c="${esc(x.codigo)}">Marcar entregado</button>`}${!x.datosEliminados ? `<button class="btn bad sm" data-act="borrarDatos" data-c="${esc(x.codigo)}">Borrar datos</button>` : ''}</div></td></tr>`).join('') : '<tr><td colspan="8" class="small">Todavía no hay ganadores.</td></tr>'}</tbody>
+      </table></div>
+      ${gan.truncado ? '<p class="small" style="margin-top:8px">Se muestran los 200 más recientes. El CSV incluye hasta 1000.</p>' : ''}
+    </div>`;
+}
+async function cargarGanadores(){
+  const r = await seguro(() => api('admin_ganadores_listar', { estado: gan.estado }));
+  if (r) { gan.items = r.items; gan.total = r.total; gan.truncado = r.truncado; renderGanadores(); }
+}
+
+// ---------- pestaña Probar ----------
+function renderProbar(){
+  const max = probar ? Math.max(1, ...probar.sectores.map(s => s.obtenido)) : 1;
+  $('#p-probar').innerHTML = `
+    <div class="card">
+      <h3>Probar las probabilidades</h3>
+      <p class="small">Simula giros con la ruleta <b>guardada</b> para comprobar que los resultados se parecen a lo que configuraste. No usa códigos ni guarda nada.</p>
+      <div class="row"><select id="pN" style="max-width:200px"><option value="1000">1 000 giros</option><option value="10000" selected>10 000 giros</option><option value="50000">50 000 giros</option><option value="100000">100 000 giros</option></select><button class="btn" id="simular">Simular</button></div>
+    </div>
+    ${probar ? `<div class="card">
+      <h3>Resultado de ${probar.n.toLocaleString('es-PE')} giros · premios: ${probar.porcentajePremios.toFixed(2)} %</h3>
+      <div class="table-wrap"><table><thead><tr><th>Sector</th><th>Tipo</th><th style="text-align:right">Esperado</th><th style="text-align:right">Obtenido</th><th></th></tr></thead>
+      <tbody>${probar.sectores.map(s => `<tr><td>${esc(s.nombre)}</td><td>${s.tipo === 'premio' ? '🎁 Premio' : 'Sigue intentando'}</td><td style="text-align:right">${s.esperado.toFixed(2)} %</td><td style="text-align:right">${s.obtenido.toFixed(2)} %</td><td><div class="bar"><i style="width:${(s.obtenido / max * 100).toFixed(1)}%"></i></div></td></tr>`).join('')}</tbody></table></div>
+    </div>` : ''}`;
+}
+
+// ---------- render general y eventos ----------
+function renderTodo(){ renderEstado(); renderSectores(); renderCodigos(); renderGanadores(); renderProbar(); }
+function irA(tab){
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
+  ['sectores', 'codigos', 'ganadores', 'probar'].forEach(t => $('#p-' + t).classList.toggle('hidden', t !== tab));
+  if (tab === 'ganadores') cargarGanadores();
+  if (tab === 'codigos') cargarCodigos();
+}
+
+document.addEventListener('input', e => {
+  const t = e.target, i = t.dataset && t.dataset.i;
+  if (i !== undefined && t.dataset.f) {
+    const s = cfg.sectores[Number(i)], f = t.dataset.f;
+    if (f === 'pct') s.pct = Math.round((parseFloat(t.value) || 0) * 100);
+    else if (f === 'activo') { s.activo = t.checked; renderSectores(); return; }
+    else s[f] = t.value;
+    actualizarSuma();
+  } else if (['cTitulo', 'cTexto', 'cProb', 'cVenc', 'cRet', 'cRetMax'].includes(t.id)) { leerAjustes(); actualizarSuma(); }
+});
+document.addEventListener('change', async e => {
+  const t = e.target;
+  if (t.dataset && t.dataset.f === 'tipo') { cfg.sectores[Number(t.dataset.i)].tipo = t.value; actualizarSuma(); }
+  if (t.id === 'swActiva') {
+    const nuevo = t.checked, base = JSON.parse(JSON.stringify(cfgSrv)); base.activo = nuevo;
+    if (!(await guardarConfig(base, nuevo ? 'Ruleta activada' : 'Ruleta en pausa'))) renderEstado();
+  }
+  if (t.id === 'swVisible') {
+    const nuevo = t.checked;
+    if (!confirm(nuevo ? '¿Mostrar la sección "Juegos" en tu web? Se publicará en 1-2 minutos.' : '¿Ocultar la sección "Juegos" de tu web? Se publicará en 1-2 minutos.')) { t.checked = !nuevo; return; }
+    const r = await seguro(() => api('admin_visibilidad', { activo: nuevo }));
+    if (r) { visible = r.activo; renderEstado(); toast(visible ? 'Sección activada. Tardará 1-2 minutos en verse en la web.' : 'Sección ocultada. Tardará 1-2 minutos en verse.'); } else t.checked = !nuevo;
+  }
+  if (t.id === 'gEstado') { gan.estado = t.value; cargarGanadores(); }
+});
+document.addEventListener('click', async e => {
+  const tab = e.target.closest && e.target.closest('.tab'); if (tab) return irA(tab.dataset.tab);
+  const b = e.target.closest && e.target.closest('[data-act],#guardar,#descartar,#generar,#verificar,#simular,#loginBtn,#salir'); if (!b) return;
+  const id = b.id, act = b.dataset.act, i = Number(b.dataset.i), c = b.dataset.c;
+  if (id === 'loginBtn') return entrar();
+  if (id === 'salir') return cerrarSesion();
+  if (id === 'guardar') { leerAjustes(); return guardarConfig(cfg); }
+  if (id === 'descartar') { if (confirm('¿Descartar los cambios sin guardar?')) { cfg = JSON.parse(JSON.stringify(cfgSrv)); renderSectores(); } return; }
+  if (id === 'generar') {
+    const r = await seguro(() => api('admin_codigos_crear', { cantidad: Number($('#gCant').value), nota: $('#gNota').value, vencimientoDias: Number($('#gVenc').value) }));
+    if (r) { cod.nuevos = r.codigos; cod.venceNuevos = r.vence; cod.pagina = 1; await cargarResumen(); renderEstado(); await cargarCodigos(); toast(r.cantidad + (r.cantidad === 1 ? ' código generado' : ' códigos generados')); }
+    return;
+  }
+  if (id === 'verificar') {
+    const v = $('#vCod').value.trim(); if (!v) return toast('Escribe un código.', true);
+    const r = await seguro(() => api('admin_verificar', { codigo: v }));
+    gan.ficha = r ? r.ficha : null; renderGanadores(); const inp = $('#vCod'); if (inp) inp.value = v; return;
+  }
+  if (id === 'simular') { const r = await seguro(() => api('admin_probar', { n: Number($('#pN').value) })); if (r) { probar = r; renderProbar(); const sel = $('#pN'); if (sel) sel.value = String(r.n); } return; }
+  switch (act) {
+    case 'subir': case 'bajar': { const j = act === 'subir' ? i - 1 : i + 1; if (j < 0 || j >= cfg.sectores.length) return; [cfg.sectores[i], cfg.sectores[j]] = [cfg.sectores[j], cfg.sectores[i]]; renderSectores(); return; }
+    case 'quitar': if (cfg.sectores.length > 6 && confirm('¿Quitar el sector "' + (cfg.sectores[i].nombre || i + 1) + '"?')) { cfg.sectores.splice(i, 1); renderSectores(); } return;
+    case 'agregar': if (cfg.sectores.length < 20) { cfg.sectores.push({ id: nuevoId(), nombre: 'Nuevo sector', emoji: '', tipo: 'nada', pct: 0, activo: true, color: '' }); renderSectores(); } return;
+    case 'repartir': return repartir();
+    case 'copiar': return copiar(c);
+    case 'copiarTodos': return copiar(cod.nuevos.join('\n'));
+    case 'cerrarNuevos': cod.nuevos = []; return renderCodigos();
+    case 'recargarCodigos': return cargarCodigos();
+    case 'pagAnt': cod.pagina = Math.max(1, cod.pagina - 1); return cargarCodigos();
+    case 'pagSig': cod.pagina++; return cargarCodigos();
+    case 'anular': if (confirm('¿Anular el código ' + c + '? Ya no se podrá usar.')) { const r = await seguro(() => api('admin_codigo_anular', { codigo: c })); if (r) { toast('Código anulado'); cargarCodigos(); } } return;
+    case 'recargarGan': return cargarGanadores();
+    case 'entregar': {
+      const x = gan.items.find(g => g.codigo === c); const quien = x && x.nombres ? x.nombres + ' (DNI ' + x.dni + ')' : 'esta persona';
+      if (!confirm('¿Confirmas que entregaste el premio a ' + quien + '?\nSus datos se conservarán ' + cfgSrv.retencionDias + ' días más y luego se borrarán.')) return;
+      const r = await seguro(() => api('admin_entregar', { codigo: c })); if (r) { toast('Premio marcado como entregado'); cargarGanadores(); }
+      return;
+    }
+    case 'borrarDatos': if (confirm('¿Borrar ahora los nombres y el DNI de este ganador? No se puede deshacer.')) { const r = await seguro(() => api('admin_borrar_datos', { codigo: c })); if (r) { toast('Datos borrados'); cargarGanadores(); } } return;
+    case 'exportar': { const r = await seguro(() => api('admin_exportar')); if (r) descargar(r.filename, r.csv); return; }
+  }
+});
+$('#pw').addEventListener('keydown', e => { if (e.key === 'Enter') entrar(); });
+window.addEventListener('beforeunload', e => { if (cfg && dirty()) { e.preventDefault(); e.returnValue = ''; } });
+})();
+</script>
+</body>
+</html>

@@ -96,7 +96,7 @@ async function notificar(/* ctx, evento */) { return false; }
 function configPublica(cfg) {
   const base = { ok: true, activo: cfg.activo === true, titulo: cfg.titulo, texto: cfg.texto };
   if (!base.activo) return base;
-  return Object.assign(base, { mostrarProbabilidades: cfg.mostrarProbabilidades === true, sectores: R.sectoresPublicos(cfg) });
+  return Object.assign(base, { mostrarProbabilidades: cfg.mostrarProbabilidades === true, retencionDias: cfg.retencionDias, sectores: R.sectoresPublicos(cfg) });
 }
 
 async function validar(ctx, b) {
