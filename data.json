@@ -290,5 +290,8 @@
     "botonTexto": "Agendar cita >",
     "mensaje": "Hola, quiero agendar: "
   },
-  "whatsappMensaje": "Hola, quisiera agendar una cita"
+  "whatsappMensaje": "Hola, quisiera agendar una cita",
+  "juegos": {
+    "activo": true
+  }
 }
